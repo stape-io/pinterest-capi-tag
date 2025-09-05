@@ -1,0 +1,5 @@
+homepage: 'https://stape.io/'
+documentation: 'https://github.com/stape-io/pinterest-capi-tag'
+versions:
+  - sha: c2a3ca6b201cbb15b288fab952342d175a5a50ea
+    changeNotes: Initial release.
