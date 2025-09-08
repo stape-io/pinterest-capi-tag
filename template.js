@@ -102,16 +102,16 @@ function getEventName(eventData, data) {
     let gaToEventName = {
       page_view: 'page_visit',
       'gtm.dom': 'page_visit',
-      add_payment_info: 'custom',
+      add_payment_info: 'add_payment_info',
       add_to_cart: 'add_to_cart',
-      add_to_wishlist: 'custom',
+      add_to_wishlist: 'add_to_wishlist',
       sign_up: 'signup',
-      begin_checkout: 'custom',
+      begin_checkout: 'initiate_checkout',
       generate_lead: 'lead',
       purchase: 'checkout',
       search: 'search',
       view_item_list: 'view_category',
-      view_item: 'custom',
+      view_item: 'view_content',
 
       contact: 'lead',
       customize_product: 'custom',
@@ -120,12 +120,12 @@ function getEventName(eventData, data) {
       schedule: 'custom',
       start_trial: 'custom',
       submit_application: 'lead',
-      subscribe: 'custom',
+      subscribe: 'subscribe',
 
       'gtm4wp.addProductToCartEEC': 'add_to_cart',
       'gtm4wp.productClickEEC': 'custom',
-      'gtm4wp.checkoutOptionEEC': 'checkout',
-      'gtm4wp.checkoutStepEEC': 'custom',
+      'gtm4wp.checkoutOptionEEC': 'custom',
+      'gtm4wp.checkoutStepEEC': 'initiate_checkout',
       'gtm4wp.orderCompletedEEC': 'checkout'
     };
 

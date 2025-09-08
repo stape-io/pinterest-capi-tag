@@ -56,8 +56,20 @@ ___TEMPLATE_PARAMETERS___
                 "displayValue": "add_to_cart"
               },
               {
+                "value": "add_to_wishlist",
+                "displayValue": "add_to_wishlist"
+              },
+              {
+                "value": "add_payment_info",
+                "displayValue": "add_payment_info"
+              },
+              {
                 "value": "checkout",
                 "displayValue": "checkout"
+              },
+              {
+                "value": "initiate_checkout",
+                "displayValue": "initiate_checkout"
               },
               {
                 "value": "lead",
@@ -72,8 +84,16 @@ ___TEMPLATE_PARAMETERS___
                 "displayValue": "signup"
               },
               {
+                "value": "subscribe",
+                "displayValue": "subscribe"
+              },
+              {
                 "value": "view_category",
                 "displayValue": "view_category"
+              },
+              {
+                "value": "view_content",
+                "displayValue": "view_content"
               },
               {
                 "value": "watch_video",
@@ -666,16 +686,16 @@ function getEventName(eventData, data) {
     let gaToEventName = {
       page_view: 'page_visit',
       'gtm.dom': 'page_visit',
-      add_payment_info: 'custom',
+      add_payment_info: 'add_payment_info',
       add_to_cart: 'add_to_cart',
-      add_to_wishlist: 'custom',
+      add_to_wishlist: 'add_to_wishlist',
       sign_up: 'signup',
-      begin_checkout: 'custom',
+      begin_checkout: 'initiate_checkout',
       generate_lead: 'lead',
       purchase: 'checkout',
       search: 'search',
       view_item_list: 'view_category',
-      view_item: 'custom',
+      view_item: 'view_content',
 
       contact: 'lead',
       customize_product: 'custom',
@@ -684,12 +704,12 @@ function getEventName(eventData, data) {
       schedule: 'custom',
       start_trial: 'custom',
       submit_application: 'lead',
-      subscribe: 'custom',
+      subscribe: 'subscribe',
 
       'gtm4wp.addProductToCartEEC': 'add_to_cart',
       'gtm4wp.productClickEEC': 'custom',
-      'gtm4wp.checkoutOptionEEC': 'checkout',
-      'gtm4wp.checkoutStepEEC': 'custom',
+      'gtm4wp.checkoutOptionEEC': 'custom',
+      'gtm4wp.checkoutStepEEC': 'initiate_checkout',
       'gtm4wp.orderCompletedEEC': 'checkout'
     };
 
