@@ -1,7 +1,5 @@
 homepage: 'https://stape.io/'
 documentation: 'https://github.com/stape-io/pinterest-capi-tag'
 versions:
-  - sha: db12190d962fae33c6aa0b5751856423a5173e9d
-    changeNotes: Add new supported events.
-  - sha: c2a3ca6b201cbb15b288fab952342d175a5a50ea
+  - sha: c876bfda1fbba94d52d13963eca9108b3023aeef
     changeNotes: Initial release.
