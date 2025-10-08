@@ -22,7 +22,6 @@ const BigQuery = require('BigQuery');
 /*==============================================================================
 ==============================================================================*/
 
-const traceId = getRequestHeader('trace-id');
 const eventData = getAllEventData();
 
 if (!isConsentGivenOrNotRequired(data, eventData)) {
@@ -49,7 +48,6 @@ if (data.testMode) {
 log({
   Name: 'Pinterest',
   Type: 'Request',
-  TraceId: traceId,
   EventName: mappedEventData.event_name,
   RequestMethod: 'POST',
   RequestUrl: postUrl,
@@ -62,7 +60,6 @@ sendHttpRequest(
     log({
       Name: 'Pinterest',
       Type: 'Response',
-      TraceId: traceId,
       EventName: mappedEventData.event_name,
       ResponseStatusCode: statusCode,
       ResponseHeaders: headers,
@@ -465,6 +462,8 @@ function log(rawDataToLog) {
   const logDestinationsHandlers = {};
   if (determinateIsLoggingEnabled()) logDestinationsHandlers.console = logConsole;
   if (determinateIsLoggingEnabledForBigQuery()) logDestinationsHandlers.bigQuery = logToBigQuery;
+
+  rawDataToLog.TraceId = getRequestHeader('trace-id');
 
   const keyMappings = {
     // No transformation for Console is needed.
