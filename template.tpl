@@ -584,24 +584,24 @@ ___SANDBOXED_JS_FOR_SERVER___
 
 /// <reference path="./server-gtm-sandboxed-apis.d.ts" />
 
-const getAllEventData = require('getAllEventData');
+const BigQuery = require('BigQuery');
 const JSON = require('JSON');
 const Math = require('Math');
-const sendHttpRequest = require('sendHttpRequest');
-const getTimestampMillis = require('getTimestampMillis');
-const getContainerVersion = require('getContainerVersion');
-const logToConsole = require('logToConsole');
-const sha256Sync = require('sha256Sync');
-const getRequestHeader = require('getRequestHeader');
-const getType = require('getType');
-const makeString = require('makeString');
-const makeInteger = require('makeInteger');
-const parseUrl = require('parseUrl');
-const setCookie = require('setCookie');
-const getCookieValues = require('getCookieValues');
-const encodeUri = require('encodeUri');
 const Object = require('Object');
-const BigQuery = require('BigQuery');
+const encodeUri = require('encodeUri');
+const getAllEventData = require('getAllEventData');
+const getContainerVersion = require('getContainerVersion');
+const getCookieValues = require('getCookieValues');
+const getRequestHeader = require('getRequestHeader');
+const getTimestampMillis = require('getTimestampMillis');
+const getType = require('getType');
+const logToConsole = require('logToConsole');
+const makeInteger = require('makeInteger');
+const makeString = require('makeString');
+const parseUrl = require('parseUrl');
+const sendHttpRequest = require('sendHttpRequest');
+const setCookie = require('setCookie');
+const sha256Sync = require('sha256Sync');
 
 /*==============================================================================
 ==============================================================================*/
@@ -998,7 +998,7 @@ function addServerEventData(eventData, data, mappedData) {
 
 function setClickIdCookieIfNeeded() {
   const url = eventData.page_location || getRequestHeader('referer');
-  const searchParams = parseUrl(url).searchParams;
+  const searchParams = (parseUrl(url) || {}).searchParams;
   if (searchParams && searchParams.epik) {
     setCookie('_epik', searchParams.epik, {
       domain: 'auto',
