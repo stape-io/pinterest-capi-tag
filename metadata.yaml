@@ -1,8 +1,8 @@
 homepage: 'https://stape.io/'
 documentation: 'https://github.com/stape-io/pinterest-capi-tag'
 versions:
-  - sha: a3c9ab65757741e59fc6c0015f49ff6309640b63
-    changeNotes: Fix issue with URL parsing.
+  - sha: 09ec29273cb99e9de3695aac2e3362fe587ab231
+    changeNotes: Fix issue with URL parsing. Improve Click ID handling. Improve parsing of Contents and Content IDs.
   - sha: fc570b88274241bc66f27e49d7ec2f420ae54310
     changeNotes: Update template logo and perform minor log improvements.
   - sha: c876bfda1fbba94d52d13963eca9108b3023aeef
