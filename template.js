@@ -24,20 +24,14 @@ const sha256Sync = require('sha256Sync');
 
 const eventData = getAllEventData();
 
-if (!isConsentGivenOrNotRequired(data, eventData)) {
+if (shouldExitEarly(data, eventData)) {
   return data.gtmOnSuccess();
 }
 
-const url = eventData.page_location || getRequestHeader('referer');
-if (url && url.lastIndexOf('https://gtm-msr.appspot.com/', 0) === 0) {
-  return data.gtmOnSuccess();
-}
-
-const commonCookie = eventData.common_cookie || {};
+setClickIdCookieIfNeeded(eventData);
 
 let postUrl =
   'https://api.pinterest.com/v5/ad_accounts/' + encodeUri(data.advertiserId) + '/events';
-setClickIdCookieIfNeeded();
 const mappedEventData = mapEvent(eventData, data);
 const postBody = { data: [mappedEventData] };
 
@@ -67,11 +61,8 @@ sendHttpRequest(
     });
 
     if (!data.useOptimisticScenario) {
-      if (statusCode >= 200 && statusCode < 300) {
-        data.gtmOnSuccess();
-      } else {
-        data.gtmOnFailure();
-      }
+      if (statusCode >= 200 && statusCode < 300) return data.gtmOnSuccess();
+      return data.gtmOnFailure();
     }
   },
   {
@@ -85,7 +76,7 @@ sendHttpRequest(
 );
 
 if (data.useOptimisticScenario) {
-  data.gtmOnSuccess();
+  return data.gtmOnSuccess();
 }
 
 /*==============================================================================
@@ -94,9 +85,8 @@ if (data.useOptimisticScenario) {
 
 function getEventName(eventData, data) {
   if (data.eventType === 'inherit') {
-    let eventName = eventData.event_name;
-    eventName = eventName.toLowerCase().trim();
-    let gaToEventName = {
+    const eventName = eventData.event_name.toLowerCase().trim();
+    const gaToEventName = {
       page_view: 'page_visit',
       'gtm.dom': 'page_visit',
       add_payment_info: 'add_payment_info',
@@ -136,7 +126,7 @@ function getEventName(eventData, data) {
 }
 
 function mapEvent(eventData, data) {
-  let eventName = getEventName(eventData, data);
+  const eventName = getEventName(eventData, data);
 
   let mappedData = {
     event_name: eventName,
@@ -157,7 +147,7 @@ function mapEvent(eventData, data) {
     };
   }
 
-  mappedData = addServerEventData(eventData, data, mappedData);
+  mappedData = addServerEventData(eventData, mappedData);
   mappedData = addUserData(eventData, mappedData);
   mappedData = addEcommerceData(eventData, mappedData);
   mappedData = overrideDataIfNeeded(data, mappedData);
@@ -227,7 +217,7 @@ function hashDataIfNeeded(mappedData) {
         key === 'external_id'
       ) {
         let hashedValue = hashData(key, mappedData.user_data[key]);
-        let type = getType(hashedValue);
+        const type = getType(hashedValue);
 
         if (type !== 'undefined' && hashedValue !== 'undefined') {
           if (type !== 'object' && type !== 'array') {
@@ -255,6 +245,7 @@ function overrideDataIfNeeded(data, mappedData) {
       mappedData.custom_data[d.name] = d.value;
     });
   }
+
   if (data.serverEventDataList) {
     data.serverEventDataList.forEach((d) => {
       mappedData[d.name] = d.value;
@@ -266,7 +257,7 @@ function overrideDataIfNeeded(data, mappedData) {
 
 function cleanupData(mappedData) {
   if (mappedData.user_data) {
-    let userData = {};
+    const userData = {};
 
     for (let userDataKey in mappedData.user_data) {
       if (mappedData.user_data[userDataKey]) {
@@ -278,7 +269,7 @@ function cleanupData(mappedData) {
   }
 
   if (mappedData.custom_data) {
-    let customData = {};
+    const customData = {};
 
     for (let customDataKey in mappedData.custom_data) {
       if (mappedData.custom_data[customDataKey] || customDataKey === 'value') {
@@ -296,7 +287,7 @@ function addEcommerceData(eventData, mappedData) {
   let currencyFromItems = '';
   let valueFromItems = 0;
   let numItems = 0;
-  let contentIds = [];
+  const contentIds = [];
 
   if (eventData.items && eventData.items[0]) {
     mappedData.custom_data.contents = [];
@@ -305,7 +296,11 @@ function addEcommerceData(eventData, mappedData) {
     eventData.items.forEach((d, i) => {
       let content = {};
 
-      if (d.item_id) contentIds.push(d.item_id);
+      if (d.item_id) {
+        const id = makeString(d.item_id);
+        content.id = id;
+        contentIds.push(id);
+      }
       if (d.quantity) {
         content.quantity = makeInteger(d.quantity);
         numItems += makeInteger(d.quantity);
@@ -399,24 +394,38 @@ function addUserData(eventData, mappedData) {
   if (eventData.gender) mappedData.user_data.ge = eventData.gender;
   if (eventData.db) mappedData.user_data.db = eventData.db;
   if (eventData.hashed_maids) mappedData.user_data.hashed_maids = eventData.hashed_maids;
-  const click_id = getCookieValues('_epik')[0] || commonCookie._epik || eventData.click_id || '';
-  if (click_id) mappedData.user_data.click_id = click_id;
+
+  const commonCookie = eventData.common_cookie || {};
+  const clickId =
+    parseClickIdFromUrl(eventData) ||
+    getCookieValues('_epik')[0] ||
+    commonCookie._epik ||
+    eventData._epik ||
+    eventData.epik ||
+    eventData.click_id ||
+    '';
+  if (clickId) mappedData.user_data.click_id = clickId;
 
   return mappedData;
 }
 
-function addServerEventData(eventData, data, mappedData) {
+function addServerEventData(eventData, mappedData) {
   if (eventData.event_id) mappedData.event_id = eventData.event_id;
   else if (eventData.transaction_id) mappedData.event_id = eventData.transaction_id;
 
   return mappedData;
 }
 
-function setClickIdCookieIfNeeded() {
-  const url = eventData.page_location || getRequestHeader('referer');
-  const searchParams = (parseUrl(url) || {}).searchParams;
-  if (searchParams && searchParams.epik) {
-    setCookie('_epik', searchParams.epik, {
+function parseClickIdFromUrl(eventData) {
+  const url = getUrl(eventData);
+  const searchParams = (parseUrl(url) || {}).searchParams || {};
+  return searchParams.epik;
+}
+
+function setClickIdCookieIfNeeded(eventData) {
+  const clickId = parseClickIdFromUrl(eventData);
+  if (clickId) {
+    setCookie('_epik', clickId, {
       domain: 'auto',
       path: '/',
       samesite: 'Lax',
@@ -428,23 +437,54 @@ function setClickIdCookieIfNeeded() {
 }
 
 function fixValueTypes(mappedData) {
-  const valueType = getType(mappedData.custom_data.value);
-  if (valueType === 'number') {
+  if (getType(mappedData.custom_data.value) === 'number') {
     mappedData.custom_data.value = makeString(mappedData.custom_data.value);
   }
+
   if (mappedData.custom_data.contents) {
-    mappedData.custom_data.contents.forEach((content) => {
-      if (getType(content.item_price) === 'number') {
-        content.item_price = makeString(content.item_price);
-      }
-    });
+    if (getType(mappedData.custom_data.contents) === 'string') {
+      mappedData.custom_data.contents = JSON.parse(mappedData.custom_data.contents);
+    }
+    if (getType(mappedData.custom_data.contents) === 'array') {
+      mappedData.custom_data.contents.forEach((content) => {
+        if (getType(content.item_price) === 'number') {
+          content.item_price = makeString(content.item_price);
+        }
+      });
+    }
   }
+
+  if (getType(mappedData.custom_data.content_ids) === 'string') {
+    if (
+      mappedData.custom_data.content_ids[0] === '[' &&
+      mappedData.custom_data.content_ids[mappedData.custom_data.content_ids.length - 1] === ']'
+    ) {
+      const contentIds = JSON.parse(mappedData.custom_data.content_ids);
+      if (getType(contentIds) === 'array') mappedData.custom_data.content_ids = contentIds;
+    } else {
+      mappedData.custom_data.content_ids = [mappedData.custom_data.content_ids];
+    }
+  }
+
   return mappedData;
 }
 
 /*==============================================================================
   Helpers
 ==============================================================================*/
+
+function shouldExitEarly(data, eventData) {
+  if (!isConsentGivenOrNotRequired(data, eventData)) return true;
+
+  const url = getUrl(data);
+  if (url && url.lastIndexOf('https://gtm-msr.appspot.com/', 0) === 0) return true;
+
+  return false;
+}
+
+function getUrl(eventData) {
+  return eventData.page_location || eventData.page_referrer || getRequestHeader('referer');
+}
 
 function isHashed(value) {
   if (!value) return false;
