@@ -1,6 +1,8 @@
 homepage: 'https://stape.io/'
 documentation: 'https://github.com/stape-io/pinterest-capi-tag'
 versions:
+  - sha: fb4fccfc2ba7cc30a960a14c602300706131e918
+    changeNotes: Fix getUrl() typo and add ecommerce.items fallback.
   - sha: 09ec29273cb99e9de3695aac2e3362fe587ab231
     changeNotes: Fix issue with URL parsing. Improve Click ID handling. Improve parsing of Contents and Content IDs.
   - sha: fc570b88274241bc66f27e49d7ec2f420ae54310
