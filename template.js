@@ -284,16 +284,26 @@ function cleanupData(mappedData) {
 }
 
 function addEcommerceData(eventData, mappedData) {
+  let items;
   let currencyFromItems = '';
   let valueFromItems = 0;
   let numItems = 0;
   const contentIds = [];
 
-  if (eventData.items && eventData.items[0]) {
-    mappedData.custom_data.contents = [];
-    currencyFromItems = eventData.items[0].currency;
+  if (getType(eventData.items) === 'array' && eventData.items.length) items = eventData.items;
+  else if (
+    getType(eventData.ecommerce) === 'object' &&
+    getType(eventData.ecommerce.items) === 'array' &&
+    eventData.ecommerce.items.length
+  ) {
+    items = eventData.ecommerce.items;
+  }
 
-    eventData.items.forEach((d, i) => {
+  if (getType(items) === 'array' && items.length) {
+    mappedData.custom_data.contents = [];
+    currencyFromItems = items[0].currency;
+
+    items.forEach((d) => {
       let content = {};
 
       if (d.item_id) {
@@ -311,7 +321,7 @@ function addEcommerceData(eventData, mappedData) {
         valueFromItems += d.quantity ? d.quantity * d.price : d.price;
       }
 
-      mappedData.custom_data.contents[i] = content;
+      mappedData.custom_data.contents.push(content);
     });
   }
 
@@ -476,7 +486,7 @@ function fixValueTypes(mappedData) {
 function shouldExitEarly(data, eventData) {
   if (!isConsentGivenOrNotRequired(data, eventData)) return true;
 
-  const url = getUrl(data);
+  const url = getUrl(eventData);
   if (url && url.lastIndexOf('https://gtm-msr.appspot.com/', 0) === 0) return true;
 
   return false;
