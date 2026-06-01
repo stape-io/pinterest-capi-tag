@@ -83,21 +83,6 @@ Control whether the tag respects marketing consent:
 - **Send data always**: The tag fires regardless of consent status.
 - **Send data in case marketing consent given**: Aborts execution if marketing consent (`ad_storage` via Google Consent Mode or Stape's Data Tag parameter) is not granted.
 
-### Logs Settings
-
-Choose the console logging behavior:
-
-- **Do not log**: No logging.
-- **Log to console during debug and preview** (default): Logs requests and responses only during GTM preview mode.
-- **Always log to console**: Logs all requests and responses.
-
-### BigQuery Logs Settings
-
-Optionally log request and response data to a BigQuery table. When enabled, you must provide:
-
-- **BigQuery Project ID** (optional — defaults to the `GOOGLE_CLOUD_PROJECT` environment variable)
-- **BigQuery Dataset ID**
-- **BigQuery Table ID**
 
 ## Useful Resources
 

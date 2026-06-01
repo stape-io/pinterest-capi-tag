@@ -1,17 +1,12 @@
-/// <reference path="./server-gtm-sandboxed-apis.d.ts" />
-
-const BigQuery = require('BigQuery');
 const JSON = require('JSON');
 const Math = require('Math');
 const Object = require('Object');
 const encodeUri = require('encodeUri');
 const getAllEventData = require('getAllEventData');
-const getContainerVersion = require('getContainerVersion');
 const getCookieValues = require('getCookieValues');
 const getRequestHeader = require('getRequestHeader');
 const getTimestampMillis = require('getTimestampMillis');
 const getType = require('getType');
-const logToConsole = require('logToConsole');
 const makeInteger = require('makeInteger');
 const makeString = require('makeString');
 const parseUrl = require('parseUrl');
@@ -39,27 +34,9 @@ if (data.testMode) {
   postUrl = postUrl + '?test=true';
 }
 
-log({
-  Name: 'Pinterest',
-  Type: 'Request',
-  EventName: mappedEventData.event_name,
-  RequestMethod: 'POST',
-  RequestUrl: postUrl,
-  RequestBody: postBody
-});
-
 sendHttpRequest(
   postUrl,
   (statusCode, headers, body) => {
-    log({
-      Name: 'Pinterest',
-      Type: 'Response',
-      EventName: mappedEventData.event_name,
-      ResponseStatusCode: statusCode,
-      ResponseHeaders: headers,
-      ResponseBody: body
-    });
-
     if (!data.useOptimisticScenario) {
       if (statusCode >= 200 && statusCode < 300) return data.gtmOnSuccess();
       return data.gtmOnFailure();
@@ -116,13 +93,9 @@ function getEventName(eventData, data) {
       'gtm4wp.orderCompletedEEC': 'checkout'
     };
 
-    if (!gaToEventName[eventName]) {
-      return 'custom';
-    }
-
-    return gaToEventName[eventName];
+    return gaToEventName[eventName] || 'custom';
   }
-  return data.eventNameStandard;
+  return data.eventType === 'standard' ? data.eventNameStandard : data.eventNameCustom;
 }
 
 function mapEvent(eventData, data) {
@@ -132,20 +105,11 @@ function mapEvent(eventData, data) {
     event_name: eventName,
     action_source: data.actionSource || 'web',
     partner_name: 'ss-stape',
-    event_time: Math.round(getTimestampMillis() / 1000),
     custom_data: {
       np: 'ss-stape'
     },
     user_data: {}
   };
-
-  if (mappedData.action_source === 'web') {
-    mappedData.event_source_url = eventData.page_location;
-    mappedData.user_data = {
-      client_ip_address: eventData.ip_override,
-      client_user_agent: eventData.user_agent
-    };
-  }
 
   mappedData = addServerEventData(eventData, mappedData);
   mappedData = addUserData(eventData, mappedData);
@@ -166,12 +130,12 @@ function hashData(key, value) {
   if (value === 'undefined' || value === 'null') return undefined;
 
   if (type === 'array') {
-    return value.map((val) => hashData(val));
+    return value.map((val) => hashData(key, val));
   }
 
   if (type === 'object') {
     return Object.keys(value).reduce((acc, val) => {
-      acc[val] = hashData(value[val]);
+      acc[val] = hashData(val, value[val]);
       return acc;
     }, {});
   }
@@ -284,144 +248,172 @@ function cleanupData(mappedData) {
 }
 
 function addEcommerceData(eventData, mappedData) {
-  let items;
-  let currencyFromItems = '';
-  let valueFromItems = 0;
-  let numItems = 0;
-  const contentIds = [];
+  const autoMapEnabled = data.hasOwnProperty('autoMapCustomDataParameters')
+    ? data.autoMapCustomDataParameters
+    : true;
 
-  if (getType(eventData.items) === 'array' && eventData.items.length) items = eventData.items;
-  else if (
-    getType(eventData.ecommerce) === 'object' &&
-    getType(eventData.ecommerce.items) === 'array' &&
-    eventData.ecommerce.items.length
-  ) {
-    items = eventData.ecommerce.items;
+  if (autoMapEnabled) {
+    let items;
+    let currencyFromItems = '';
+    let valueFromItems = 0;
+    let numItems = 0;
+    const contentIds = [];
+
+    if (getType(eventData.items) === 'array' && eventData.items.length) items = eventData.items;
+    else if (
+      getType(eventData.ecommerce) === 'object' &&
+      getType(eventData.ecommerce.items) === 'array' &&
+      eventData.ecommerce.items.length
+    ) {
+      items = eventData.ecommerce.items;
+    }
+
+    if (getType(items) === 'array' && items.length) {
+      mappedData.custom_data.contents = [];
+      currencyFromItems = items[0].currency;
+
+      items.forEach((d) => {
+        let content = {};
+
+        if (d.item_id) {
+          const id = makeString(d.item_id);
+          content.id = id;
+          contentIds.push(id);
+        }
+        if (d.quantity) {
+          content.quantity = makeInteger(d.quantity);
+          numItems += makeInteger(d.quantity);
+        }
+
+        if (d.price) {
+          content.item_price = makeString(d.price);
+          valueFromItems += d.quantity ? d.quantity * d.price : d.price;
+        }
+
+        mappedData.custom_data.contents.push(content);
+      });
+    }
+
+    const value =
+      eventData['x-ga-mp1-ev'] || eventData['x-ga-mp1-tr'] || eventData.value || valueFromItems;
+    if (value) mappedData.custom_data.value = makeString(value);
+
+    const currency = eventData.currency || currencyFromItems;
+    if (currency) mappedData.custom_data.currency = currency;
+
+    if (contentIds.length) mappedData.custom_data.content_ids = contentIds;
+    if (numItems) mappedData.custom_data.num_items = makeInteger(numItems);
+
+    if (eventData.search_term) mappedData.custom_data.search_string = eventData.search_term;
+    if (eventData.transaction_id) mappedData.custom_data.order_id = eventData.transaction_id;
+
+    if (eventData.opt_out_type) mappedData.custom_data.opt_out_type = eventData.opt_out_type;
+    if (eventData.content_name) mappedData.custom_data.content_name = eventData.content_name;
+    if (eventData.content_category)
+      mappedData.custom_data.content_category = eventData.content_category;
+    if (eventData.content_brand) mappedData.custom_data.content_brand = eventData.content_brand;
   }
 
-  if (getType(items) === 'array' && items.length) {
-    mappedData.custom_data.contents = [];
-    currencyFromItems = items[0].currency;
-
-    items.forEach((d) => {
-      let content = {};
-
-      if (d.item_id) {
-        const id = makeString(d.item_id);
-        content.id = id;
-        contentIds.push(id);
-      }
-      if (d.quantity) {
-        content.quantity = makeInteger(d.quantity);
-        numItems += makeInteger(d.quantity);
-      }
-
-      if (d.price) {
-        content.item_price = makeString(d.price);
-        valueFromItems += d.quantity ? d.quantity * d.price : d.price;
-      }
-
-      mappedData.custom_data.contents.push(content);
-    });
-  }
-
-  if (eventData['x-ga-mp1-ev']) mappedData.custom_data.value = eventData['x-ga-mp1-ev'];
-  else if (eventData['x-ga-mp1-tr']) mappedData.custom_data.value = eventData['x-ga-mp1-tr'];
-  else if (eventData.value) mappedData.custom_data.value = makeString(eventData.value);
-  else if (valueFromItems) mappedData.custom_data.value = makeString(valueFromItems);
-
-  if (eventData.currency) mappedData.custom_data.currency = eventData.currency;
-  else if (currencyFromItems) mappedData.custom_data.currency = currencyFromItems;
-
-  if (contentIds.length) mappedData.custom_data.content_ids = contentIds;
-  if (numItems) mappedData.custom_data.num_items = makeInteger(numItems);
-
-  if (eventData.search_term) mappedData.custom_data.search_string = eventData.search_term;
-  if (eventData.transaction_id) mappedData.custom_data.order_id = eventData.transaction_id;
-
-  if (eventData.opt_out_type) mappedData.custom_data.opt_out_type = eventData.opt_out_type;
-  if (eventData.content_name) mappedData.custom_data.content_name = eventData.content_name;
-  if (eventData.content_category)
-    mappedData.custom_data.content_category = eventData.content_category;
-  if (eventData.content_brand) mappedData.custom_data.content_brand = eventData.content_brand;
   return mappedData;
 }
 
 function addUserData(eventData, mappedData) {
-  let address = {};
-  let user_data = {};
-  if (getType(eventData.user_data) === 'object') {
-    user_data = eventData.user_data;
-    const addressType = getType(user_data.address);
-    if (addressType === 'object' || addressType === 'array') {
-      address = user_data.address[0] || user_data.address;
+  const autoMapEnabled = data.hasOwnProperty('autoMapUserDataParameters')
+    ? data.autoMapUserDataParameters
+    : true;
+
+  if (autoMapEnabled) {
+    let address = {};
+    let user_data = {};
+
+    if (getType(eventData.user_data) === 'object') {
+      user_data = eventData.user_data;
+      const addressType = getType(user_data.address);
+      if (addressType === 'object' || addressType === 'array') {
+        address = user_data.address[0] || user_data.address;
+      }
     }
+
+    if (mappedData.action_source === 'web') {
+      if (eventData.ip_override) mappedData.user_data.client_ip_address = eventData.ip_override;
+      if (eventData.user_agent) mappedData.user_data.client_user_agent = eventData.user_agent;
+    }
+
+    const externalId = eventData.external_id || eventData.user_id || eventData.userId;
+    if (externalId) mappedData.user_data.external_id = externalId;
+
+    const lastName =
+      eventData.lastName ||
+      eventData.LastName ||
+      eventData.nameLast ||
+      eventData.last_name ||
+      user_data.last_name ||
+      address.last_name;
+    if (lastName) mappedData.user_data.ln = lastName;
+
+    const firstName =
+      eventData.firstName ||
+      eventData.FirstName ||
+      eventData.nameFirst ||
+      eventData.first_name ||
+      user_data.first_name ||
+      address.first_name;
+    if (firstName) mappedData.user_data.fn = firstName;
+
+    const email = eventData.email || user_data.email_address || user_data.email;
+    if (email) mappedData.user_data.em = email;
+
+    const phone = eventData.phone || user_data.phone_number;
+    if (phone) mappedData.user_data.ph = phone;
+
+    const city = eventData.city || address.city;
+    if (city) mappedData.user_data.ct = city;
+
+    const state = eventData.state || eventData.region || user_data.region || address.region;
+    if (state) mappedData.user_data.st = state;
+
+    const zip =
+      eventData.zip || eventData.postal_code || user_data.postal_code || address.postal_code;
+    if (zip) mappedData.user_data.zp = zip;
+
+    const countryCode =
+      eventData.countryCode || eventData.country || user_data.country || address.country;
+    if (countryCode) mappedData.user_data.country = countryCode;
+
+    if (eventData.gender) mappedData.user_data.ge = eventData.gender;
+    if (eventData.db) mappedData.user_data.db = eventData.db;
+    if (eventData.hashed_maids) mappedData.user_data.hashed_maids = eventData.hashed_maids;
+
+    const commonCookie = eventData.common_cookie || {};
+    const clickId =
+      parseClickIdFromUrl(eventData) ||
+      getCookieValues('_epik')[0] ||
+      commonCookie._epik ||
+      eventData._epik ||
+      eventData.epik ||
+      eventData.click_id ||
+      '';
+    if (clickId) mappedData.user_data.click_id = clickId;
   }
-
-  if (eventData.external_id) mappedData.user_data.external_id = eventData.external_id;
-  else if (eventData.user_id) mappedData.user_data.external_id = eventData.user_id;
-  else if (eventData.userId) mappedData.user_data.external_id = eventData.userId;
-
-  if (eventData.lastName) mappedData.user_data.ln = eventData.lastName;
-  else if (eventData.LastName) mappedData.user_data.ln = eventData.LastName;
-  else if (eventData.nameLast) mappedData.user_data.ln = eventData.nameLast;
-  else if (eventData.last_name) mappedData.user_data.ln = eventData.last_name;
-  else if (user_data.last_name) mappedData.user_data.ln = user_data.last_name;
-  else if (address.last_name) mappedData.user_data.ln = address.last_name;
-
-  if (eventData.firstName) mappedData.user_data.fn = eventData.firstName;
-  else if (eventData.FirstName) mappedData.user_data.fn = eventData.FirstName;
-  else if (eventData.nameFirst) mappedData.user_data.fn = eventData.nameFirst;
-  else if (eventData.first_name) mappedData.user_data.fn = eventData.first_name;
-  else if (user_data.first_name) mappedData.user_data.fn = user_data.first_name;
-  else if (address.first_name) mappedData.user_data.fn = address.first_name;
-
-  if (eventData.email) mappedData.user_data.em = eventData.email;
-  else if (user_data.email_address) mappedData.user_data.em = user_data.email_address;
-  else if (user_data.email) mappedData.user_data.em = user_data.email;
-
-  if (eventData.phone) mappedData.user_data.ph = eventData.phone;
-  else if (user_data.phone_number) mappedData.user_data.ph = user_data.phone_number;
-
-  if (eventData.city) mappedData.user_data.ct = eventData.city;
-  else if (address.city) mappedData.user_data.ct = address.city;
-
-  if (eventData.state) mappedData.user_data.st = eventData.state;
-  else if (eventData.region) mappedData.user_data.st = eventData.region;
-  else if (user_data.region) mappedData.user_data.st = user_data.region;
-  else if (address.region) mappedData.user_data.st = address.region;
-
-  if (eventData.zip) mappedData.user_data.zp = eventData.zip;
-  else if (eventData.postal_code) mappedData.user_data.zp = eventData.postal_code;
-  else if (user_data.postal_code) mappedData.user_data.zp = user_data.postal_code;
-  else if (address.postal_code) mappedData.user_data.zp = address.postal_code;
-
-  if (eventData.countryCode) mappedData.user_data.country = eventData.countryCode;
-  else if (eventData.country) mappedData.user_data.country = eventData.country;
-  else if (user_data.country) mappedData.user_data.country = user_data.country;
-  else if (address.country) mappedData.user_data.country = address.country;
-
-  if (eventData.gender) mappedData.user_data.ge = eventData.gender;
-  if (eventData.db) mappedData.user_data.db = eventData.db;
-  if (eventData.hashed_maids) mappedData.user_data.hashed_maids = eventData.hashed_maids;
-
-  const commonCookie = eventData.common_cookie || {};
-  const clickId =
-    parseClickIdFromUrl(eventData) ||
-    getCookieValues('_epik')[0] ||
-    commonCookie._epik ||
-    eventData._epik ||
-    eventData.epik ||
-    eventData.click_id ||
-    '';
-  if (clickId) mappedData.user_data.click_id = clickId;
 
   return mappedData;
 }
 
 function addServerEventData(eventData, mappedData) {
-  if (eventData.event_id) mappedData.event_id = eventData.event_id;
-  else if (eventData.transaction_id) mappedData.event_id = eventData.transaction_id;
+  const autoMapEnabled = data.hasOwnProperty('autoMapServerEventDataParameters')
+    ? data.autoMapServerEventDataParameters
+    : true;
+
+  if (autoMapEnabled) {
+    if (mappedData.action_source === 'web') {
+      if (eventData.page_location) mappedData.event_source_url = eventData.page_location;
+    }
+
+    mappedData.event_time = Math.round(getTimestampMillis() / 1000);
+
+    const eventId = eventData.event_id || eventData.transaction_id;
+    if (eventId) mappedData.event_id = eventId;
+  }
 
   return mappedData;
 }
@@ -506,92 +498,4 @@ function isConsentGivenOrNotRequired(data, eventData) {
   if (eventData.consent_state) return !!eventData.consent_state.ad_storage;
   const xGaGcs = eventData['x-ga-gcs'] || ''; // x-ga-gcs is a string like "G110"
   return xGaGcs[2] === '1';
-}
-
-function log(rawDataToLog) {
-  const logDestinationsHandlers = {};
-  if (determinateIsLoggingEnabled()) logDestinationsHandlers.console = logConsole;
-  if (determinateIsLoggingEnabledForBigQuery()) logDestinationsHandlers.bigQuery = logToBigQuery;
-
-  rawDataToLog.TraceId = getRequestHeader('trace-id');
-
-  const keyMappings = {
-    // No transformation for Console is needed.
-    bigQuery: {
-      Name: 'tag_name',
-      Type: 'type',
-      TraceId: 'trace_id',
-      EventName: 'event_name',
-      RequestMethod: 'request_method',
-      RequestUrl: 'request_url',
-      RequestBody: 'request_body',
-      ResponseStatusCode: 'response_status_code',
-      ResponseHeaders: 'response_headers',
-      ResponseBody: 'response_body'
-    }
-  };
-
-  for (const logDestination in logDestinationsHandlers) {
-    const handler = logDestinationsHandlers[logDestination];
-    if (!handler) continue;
-
-    const mapping = keyMappings[logDestination];
-    const dataToLog = mapping ? {} : rawDataToLog;
-
-    if (mapping) {
-      for (const key in rawDataToLog) {
-        const mappedKey = mapping[key] || key;
-        dataToLog[mappedKey] = rawDataToLog[key];
-      }
-    }
-
-    handler(dataToLog);
-  }
-}
-
-function logConsole(dataToLog) {
-  logToConsole(JSON.stringify(dataToLog));
-}
-
-function logToBigQuery(dataToLog) {
-  const connectionInfo = {
-    projectId: data.logBigQueryProjectId,
-    datasetId: data.logBigQueryDatasetId,
-    tableId: data.logBigQueryTableId
-  };
-
-  dataToLog.timestamp = getTimestampMillis();
-
-  ['request_body', 'response_headers', 'response_body'].forEach((p) => {
-    dataToLog[p] = JSON.stringify(dataToLog[p]);
-  });
-
-  BigQuery.insert(connectionInfo, [dataToLog], { ignoreUnknownValues: true });
-}
-
-function determinateIsLoggingEnabled() {
-  const containerVersion = getContainerVersion();
-  const isDebug = !!(
-    containerVersion &&
-    (containerVersion.debugMode || containerVersion.previewMode)
-  );
-
-  if (!data.logType) {
-    return isDebug;
-  }
-
-  if (data.logType === 'no') {
-    return false;
-  }
-
-  if (data.logType === 'debug') {
-    return isDebug;
-  }
-
-  return data.logType === 'always';
-}
-
-function determinateIsLoggingEnabledForBigQuery() {
-  if (data.bigQueryLogType === 'no') return false;
-  return data.bigQueryLogType === 'always';
 }
