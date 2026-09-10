@@ -360,7 +360,7 @@ function addUserData(eventData, mappedData) {
       address.first_name;
     if (firstName) mappedData.user_data.fn = firstName;
 
-    const email = eventData.email || user_data.email_address || user_data.email;
+    const email = eventData.email || user_data.email_address || user_data.email || user_data.sha256_email_address;
     if (email) mappedData.user_data.em = email;
 
     const phone = eventData.phone || user_data.phone_number;
