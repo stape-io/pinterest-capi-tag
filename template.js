@@ -25,32 +25,9 @@ if (shouldExitEarly(data, eventData)) {
 
 setClickIdCookieIfNeeded(eventData);
 
-let postUrl =
-  'https://api.pinterest.com/v5/ad_accounts/' + encodeUri(data.advertiserId) + '/events';
 const mappedEventData = mapEvent(eventData, data);
-const postBody = { data: [mappedEventData] };
 
-if (data.testMode) {
-  postUrl = postUrl + '?test=true';
-}
-
-sendHttpRequest(
-  postUrl,
-  (statusCode, headers, body) => {
-    if (!data.useOptimisticScenario) {
-      if (statusCode >= 200 && statusCode < 300) return data.gtmOnSuccess();
-      return data.gtmOnFailure();
-    }
-  },
-  {
-    headers: {
-      'content-type': 'application/json',
-      Authorization: 'Bearer ' + data.apiAccessToken
-    },
-    method: 'POST'
-  },
-  JSON.stringify(postBody)
-);
+sendEvent(data, mappedEventData);
 
 if (data.useOptimisticScenario) {
   return data.gtmOnSuccess();
@@ -59,6 +36,33 @@ if (data.useOptimisticScenario) {
 /*==============================================================================
   Vendor related functions
 ==============================================================================*/
+
+function sendEvent(data, mappedEventData) {
+  const postUrl =
+    'https://api.pinterest.com/v5/ad_accounts/' +
+    encodeUri(data.advertiserId) +
+    '/events' +
+    (data.testMode ? '?test=true' : '');
+  const postBody = { data: [mappedEventData] };
+
+  sendHttpRequest(
+    postUrl,
+    (statusCode, headers, body) => {
+      if (!data.useOptimisticScenario) {
+        if (statusCode >= 200 && statusCode < 300) return data.gtmOnSuccess();
+        return data.gtmOnFailure();
+      }
+    },
+    {
+      headers: {
+        'content-type': 'application/json',
+        Authorization: 'Bearer ' + data.apiAccessToken
+      },
+      method: 'POST'
+    },
+    JSON.stringify(postBody)
+  );
+}
 
 function getEventName(eventData, data) {
   if (data.eventType === 'inherit') {
@@ -348,7 +352,8 @@ function addUserData(eventData, mappedData) {
       eventData.nameLast ||
       eventData.last_name ||
       user_data.last_name ||
-      address.last_name;
+      address.last_name ||
+      address.sha256_last_name;
     if (lastName) mappedData.user_data.ln = lastName;
 
     const firstName =
@@ -357,10 +362,15 @@ function addUserData(eventData, mappedData) {
       eventData.nameFirst ||
       eventData.first_name ||
       user_data.first_name ||
-      address.first_name;
+      address.first_name ||
+      address.sha256_first_name;
     if (firstName) mappedData.user_data.fn = firstName;
 
-    const email = eventData.email || user_data.email_address || user_data.email;
+    const email =
+      eventData.email ||
+      user_data.email_address ||
+      user_data.email ||
+      user_data.sha256_email_address;
     if (email) mappedData.user_data.em = email;
 
     const phone = eventData.phone || user_data.phone_number;

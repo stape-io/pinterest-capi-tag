@@ -1,6 +1,8 @@
 homepage: 'https://stape.io/'
 documentation: 'https://github.com/stape-io/pinterest-capi-tag'
 versions:
+  - sha: f1f552ad303c4dbd857889606ad9fbc28c3a9db8
+    changeNotes: Add sha256 user data fallbacks, document them in help text, and add a unit test suite.
   - sha: dccd164bd9aee79829fe06c2f63a676983ca1c40
     changeNotes: Logging removal.
   - sha: fb4fccfc2ba7cc30a960a14c602300706131e918

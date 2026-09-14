@@ -357,7 +357,7 @@ ___TEMPLATE_PARAMETERS___
         "name": "autoMapUserDataParameters",
         "checkboxText": "Automap User Data Parameters",
         "simpleValueType": true,
-        "help": "If enabled, the tag will attempt to automatically map parameters from the Event Data.\n\u003cbr/\u003e\u003cbr/\u003e\nAny value you manually enter in a field below will always override the auto-mapped value.\n\u003cbr/\u003e\u003cbr/\u003e\nDefault mappings:\n\u003cul\u003e\n\u003cli\u003e\u003cb\u003eEmail:\u003c/b\u003e \u003ci\u003eeventData.email\u003c/i\u003e, \u003ci\u003eeventData.user_data.email_address\u003c/i\u003e, \u003ci\u003eeventData.user_data.email\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003ePhone:\u003c/b\u003e \u003ci\u003eeventData.phone\u003c/i\u003e, \u003ci\u003eeventData.user_data.phone_number\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eFirst Name:\u003c/b\u003e \u003ci\u003eeventData.firstName\u003c/i\u003e, \u003ci\u003eeventData.FirstName\u003c/i\u003e, \u003ci\u003eeventData.nameFirst\u003c/i\u003e, \u003ci\u003eeventData.first_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.first_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.first_name\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eLast Name:\u003c/b\u003e \u003ci\u003eeventData.lastName\u003c/i\u003e, \u003ci\u003eeventData.LastName\u003c/i\u003e, \u003ci\u003eeventData.nameLast\u003c/i\u003e, \u003ci\u003eeventData.last_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.last_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.last_name\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eCity:\u003c/b\u003e \u003ci\u003eeventData.city\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.city\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eState:\u003c/b\u003e \u003ci\u003eeventData.state\u003c/i\u003e, \u003ci\u003eeventData.region\u003c/i\u003e, \u003ci\u003eeventData.user_data.region\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.region\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eZIP Code:\u003c/b\u003e \u003ci\u003eeventData.zip\u003c/i\u003e, \u003ci\u003eeventData.postal_code\u003c/i\u003e, \u003ci\u003eeventData.user_data.postal_code\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.postal_code\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eCountry:\u003c/b\u003e \u003ci\u003eeventData.countryCode\u003c/i\u003e, \u003ci\u003eeventData.country\u003c/i\u003e, \u003ci\u003eeventData.user_data.country\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.country\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eGender:\u003c/b\u003e \u003ci\u003eeventData.gender\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eDate of Birth:\u003c/b\u003e \u003ci\u003eeventData.db\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eMobile Advertising ID:\u003c/b\u003e \u003ci\u003eeventData.hashed_maids\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eExternal ID:\u003c/b\u003e \u003ci\u003eeventData.external_id\u003c/i\u003e, \u003ci\u003eeventData.user_id\u003c/i\u003e, \u003ci\u003eeventData.userId\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eIP Address:\u003c/b\u003e \u003ci\u003eeventData.ip_override\u003c/i\u003e (only when Action Source is Web)\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eUser Agent:\u003c/b\u003e \u003ci\u003eeventData.user_agent\u003c/i\u003e (only when Action Source is Web)\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eClick ID:\u003c/b\u003e \u003ci\u003eepik URL parameter\u003c/i\u003e, \u003ci\u003e_epik cookie\u003c/i\u003e, \u003ci\u003eeventData.common_cookie._epik\u003c/i\u003e, \u003ci\u003eeventData._epik\u003c/i\u003e, \u003ci\u003eeventData.epik\u003c/i\u003e, \u003ci\u003eeventData.click_id\u003c/i\u003e\u003c/li\u003e\n\u003c/ul\u003e",
+        "help": "If enabled, the tag will attempt to automatically map parameters from the Event Data.\n\u003cbr/\u003e\u003cbr/\u003e\nAny value you manually enter in a field below will always override the auto-mapped value.\n\u003cbr/\u003e\u003cbr/\u003e\nDefault mappings:\n\u003cul\u003e\n\u003cli\u003e\u003cb\u003eEmail:\u003c/b\u003e \u003ci\u003eeventData.email\u003c/i\u003e, \u003ci\u003eeventData.user_data.email_address\u003c/i\u003e, \u003ci\u003eeventData.user_data.email\u003c/i\u003e, \u003ci\u003eeventData.user_data.sha256_email_address\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003ePhone:\u003c/b\u003e \u003ci\u003eeventData.phone\u003c/i\u003e, \u003ci\u003eeventData.user_data.phone_number\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eFirst Name:\u003c/b\u003e \u003ci\u003eeventData.firstName\u003c/i\u003e, \u003ci\u003eeventData.FirstName\u003c/i\u003e, \u003ci\u003eeventData.nameFirst\u003c/i\u003e, \u003ci\u003eeventData.first_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.first_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.first_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.sha256_first_name\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eLast Name:\u003c/b\u003e \u003ci\u003eeventData.lastName\u003c/i\u003e, \u003ci\u003eeventData.LastName\u003c/i\u003e, \u003ci\u003eeventData.nameLast\u003c/i\u003e, \u003ci\u003eeventData.last_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.last_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.last_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.sha256_last_name\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eCity:\u003c/b\u003e \u003ci\u003eeventData.city\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.city\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eState:\u003c/b\u003e \u003ci\u003eeventData.state\u003c/i\u003e, \u003ci\u003eeventData.region\u003c/i\u003e, \u003ci\u003eeventData.user_data.region\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.region\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eZIP Code:\u003c/b\u003e \u003ci\u003eeventData.zip\u003c/i\u003e, \u003ci\u003eeventData.postal_code\u003c/i\u003e, \u003ci\u003eeventData.user_data.postal_code\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.postal_code\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eCountry:\u003c/b\u003e \u003ci\u003eeventData.countryCode\u003c/i\u003e, \u003ci\u003eeventData.country\u003c/i\u003e, \u003ci\u003eeventData.user_data.country\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.country\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eGender:\u003c/b\u003e \u003ci\u003eeventData.gender\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eDate of Birth:\u003c/b\u003e \u003ci\u003eeventData.db\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eMobile Advertising ID:\u003c/b\u003e \u003ci\u003eeventData.hashed_maids\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eExternal ID:\u003c/b\u003e \u003ci\u003eeventData.external_id\u003c/i\u003e, \u003ci\u003eeventData.user_id\u003c/i\u003e, \u003ci\u003eeventData.userId\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eIP Address:\u003c/b\u003e \u003ci\u003eeventData.ip_override\u003c/i\u003e (only when Action Source is Web)\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eUser Agent:\u003c/b\u003e \u003ci\u003eeventData.user_agent\u003c/i\u003e (only when Action Source is Web)\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eClick ID:\u003c/b\u003e \u003ci\u003eepik URL parameter\u003c/i\u003e, \u003ci\u003e_epik cookie\u003c/i\u003e, \u003ci\u003eeventData.common_cookie._epik\u003c/i\u003e, \u003ci\u003eeventData._epik\u003c/i\u003e, \u003ci\u003eeventData.epik\u003c/i\u003e, \u003ci\u003eeventData.click_id\u003c/i\u003e\u003c/li\u003e\n\u003c/ul\u003e",
         "defaultValue": true
       },
       {
@@ -600,32 +600,9 @@ if (shouldExitEarly(data, eventData)) {
 
 setClickIdCookieIfNeeded(eventData);
 
-let postUrl =
-  'https://api.pinterest.com/v5/ad_accounts/' + encodeUri(data.advertiserId) + '/events';
 const mappedEventData = mapEvent(eventData, data);
-const postBody = { data: [mappedEventData] };
 
-if (data.testMode) {
-  postUrl = postUrl + '?test=true';
-}
-
-sendHttpRequest(
-  postUrl,
-  (statusCode, headers, body) => {
-    if (!data.useOptimisticScenario) {
-      if (statusCode >= 200 && statusCode < 300) return data.gtmOnSuccess();
-      return data.gtmOnFailure();
-    }
-  },
-  {
-    headers: {
-      'content-type': 'application/json',
-      Authorization: 'Bearer ' + data.apiAccessToken
-    },
-    method: 'POST'
-  },
-  JSON.stringify(postBody)
-);
+sendEvent(data, mappedEventData);
 
 if (data.useOptimisticScenario) {
   return data.gtmOnSuccess();
@@ -634,6 +611,33 @@ if (data.useOptimisticScenario) {
 /*==============================================================================
   Vendor related functions
 ==============================================================================*/
+
+function sendEvent(data, mappedEventData) {
+  const postUrl =
+    'https://api.pinterest.com/v5/ad_accounts/' +
+    encodeUri(data.advertiserId) +
+    '/events' +
+    (data.testMode ? '?test=true' : '');
+  const postBody = { data: [mappedEventData] };
+
+  sendHttpRequest(
+    postUrl,
+    (statusCode, headers, body) => {
+      if (!data.useOptimisticScenario) {
+        if (statusCode >= 200 && statusCode < 300) return data.gtmOnSuccess();
+        return data.gtmOnFailure();
+      }
+    },
+    {
+      headers: {
+        'content-type': 'application/json',
+        Authorization: 'Bearer ' + data.apiAccessToken
+      },
+      method: 'POST'
+    },
+    JSON.stringify(postBody)
+  );
+}
 
 function getEventName(eventData, data) {
   if (data.eventType === 'inherit') {
@@ -923,7 +927,8 @@ function addUserData(eventData, mappedData) {
       eventData.nameLast ||
       eventData.last_name ||
       user_data.last_name ||
-      address.last_name;
+      address.last_name ||
+      address.sha256_last_name;
     if (lastName) mappedData.user_data.ln = lastName;
 
     const firstName =
@@ -932,10 +937,15 @@ function addUserData(eventData, mappedData) {
       eventData.nameFirst ||
       eventData.first_name ||
       user_data.first_name ||
-      address.first_name;
+      address.first_name ||
+      address.sha256_first_name;
     if (firstName) mappedData.user_data.fn = firstName;
 
-    const email = eventData.email || user_data.email_address || user_data.email;
+    const email =
+      eventData.email ||
+      user_data.email_address ||
+      user_data.email ||
+      user_data.sha256_email_address;
     if (email) mappedData.user_data.em = email;
 
     const phone = eventData.phone || user_data.phone_number;
@@ -1336,38 +1346,652 @@ ___SERVER_PERMISSIONS___
 ___TESTS___
 
 scenarios:
-- name: UI Check
+- name: '[Early Exit] Skips request when consent required but not given via x-ga-gcs'
   code: |-
-    let actualSuccessCallback, httpBody;
+    mockData.adStorageConsent = 'required';
+    mock('getAllEventData', () => assign(baseEventData(), { 'x-ga-gcs': 'G100' }));
 
-    mock('sendHttpRequest', (postUrl, response, options, body) => {
-      actualSuccessCallback = response;
-      httpBody = body;
-      actualSuccessCallback(200, {}, '');
+    runCode(mockData);
+
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+    assertApi('sendHttpRequest').wasNotCalled();
+- name: '[Early Exit] Skips request when consent required but not given via consent_state'
+  code: |-
+    mockData.adStorageConsent = 'required';
+    mock('getAllEventData', () => assign(baseEventData(), { consent_state: { ad_storage: false } }));
+
+    runCode(mockData);
+
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+    assertApi('sendHttpRequest').wasNotCalled();
+- name: '[Early Exit] Proceeds when consent required and given'
+  code: |-
+    [
+      { 'x-ga-gcs': 'G110' },
+      { consent_state: { ad_storage: 'granted' } }
+    ].forEach(consentFields => {
+      cleanup();
+      mockData.adStorageConsent = 'required';
+      mock('getAllEventData', () => assign(baseEventData(), consentFields));
+
+      runCode(mockData);
+
+      assertApi('sendHttpRequest').wasCalled();
+      assertApi('gtmOnSuccess').wasCalled();
+      assertApi('gtmOnFailure').wasNotCalled();
+    });
+- name: '[Early Exit] Consent check skipped when adStorageConsent is optional'
+  code: |-
+    mockData.adStorageConsent = 'optional';
+    mock('getAllEventData', () => assign(baseEventData(), { 'x-ga-gcs': 'G100' }));
+
+    runCode(mockData);
+
+    assertApi('sendHttpRequest').wasCalled();
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Early Exit] Skips request when URL matches GTM preview endpoint'
+  code: |-
+    mock('getAllEventData', () => assign(baseEventData(), { page_location: 'https://gtm-msr.appspot.com/collect' }));
+
+    runCode(mockData);
+
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+    assertApi('sendHttpRequest').wasNotCalled();
+- name: '[Event Name] Maps known GA4 event names to Pinterest names when inherit'
+  code: |-
+    [
+      { input: 'page_view', expected: 'page_visit' },
+      { input: 'purchase', expected: 'checkout' },
+      { input: 'add_to_cart', expected: 'add_to_cart' },
+      { input: 'sign_up', expected: 'signup' },
+      { input: 'begin_checkout', expected: 'initiate_checkout' },
+      { input: 'view_item', expected: 'view_content' },
+      { input: 'unknown_event', expected: 'custom' }
+    ].forEach(scenario => {
+      cleanup();
+      mockData.eventType = 'inherit';
+      mock('getAllEventData', () => assign(baseEventData(), { event_name: scenario.input }));
+
+      let sentEventName;
+      mock('sendHttpRequest', (url, callback, options, body) => {
+        sentEventName = JSON.parse(body).data[0].event_name;
+        callback(200, {}, '');
+      });
+
+      runCode(mockData);
+
+      assertThat(sentEventName).isEqualTo(scenario.expected);
+      assertApi('gtmOnSuccess').wasCalled();
+      assertApi('gtmOnFailure').wasNotCalled();
+    });
+- name: '[Event Name] Uses eventNameStandard or eventNameCustom based on eventType'
+  code: |-
+    [
+      { eventType: 'standard', eventNameStandard: 'add_to_cart', eventNameCustom: '', expected: 'add_to_cart' },
+      { eventType: 'custom', eventNameStandard: '', eventNameCustom: 'my_custom_event', expected: 'my_custom_event' }
+    ].forEach(scenario => {
+      cleanup();
+      mockData.eventType = scenario.eventType;
+      mockData.eventNameStandard = scenario.eventNameStandard;
+      mockData.eventNameCustom = scenario.eventNameCustom;
+
+      let sentEventName;
+      mock('sendHttpRequest', (url, callback, options, body) => {
+        sentEventName = JSON.parse(body).data[0].event_name;
+        callback(200, {}, '');
+      });
+
+      runCode(mockData);
+
+      assertThat(sentEventName).isEqualTo(scenario.expected);
+      assertApi('gtmOnSuccess').wasCalled();
+      assertApi('gtmOnFailure').wasNotCalled();
+    });
+- name: '[Request] Builds URL headers and method correctly'
+  code: |-
+    mock('sendHttpRequest', (url, callback, options, body) => {
+      assertThat(url).isEqualTo('https://api.pinterest.com/v5/ad_accounts/549123456789/events');
+      assertThat(options.method).isEqualTo('POST');
+      assertThat(options.headers['content-type']).isEqualTo('application/json');
+      assertThat(options.headers.Authorization).isEqualTo('Bearer token123');
+      callback(200, {}, '');
     });
 
     runCode(mockData);
-setup: "const JSON = require('JSON');\nconst Promise = require('Promise');\nconst\
-  \ parseUrl = require('parseUrl');\nconst Object = require('Object');\nconst makeInteger\
-  \ = require('makeInteger');\n\nfunction mergeObj(target, source) {\n  for (const\
-  \ key in source) {\n    if (source.hasOwnProperty(key)) target[key] = source[key];\n\
-  \  }\n  return target;\n}\n\nconst expectedBigQuerySettings = {\n  logBigQueryProjectId:\
-  \ 'logBigQueryProjectId',\n  logBigQueryDatasetId: 'logBigQueryDatasetId',\n  logBigQueryTableId:\
-  \ 'logBigQueryTableId'\n};\n\nconst requiredConsoleKeys = ['Type', 'TraceId', 'Name'];\n\
-  const requiredBqKeys = ['timestamp', 'type', 'trace_id', 'tag_name'];\nconst expectedBqOptions\
-  \ = { ignoreUnknownValues: true };\n\nconst mockData = {};\n\nmock('sendHttpRequest',\
-  \ (requestUrl, callback, requestOptions, requestBody) => {\n  if (typeof callback\
-  \ === 'function') {\n    callback(200);\n  } else {\n    requestBody = requestOptions;\n\
-  \    requestOptions = callback;\n    return Promise.create((resolve, reject) =>\
-  \ {\n      resolve({ statusCode: 200 });\n    });  \n  }\n});\n\nmock('getRequestHeader',\
-  \ (header) => {\n  if (header === 'trace-id') return 'expectedTraceId';\n  if (header\
-  \ === 'referer') return 'https://example.com';\n});\n\nmock('getTimestampMillis',\
-  \ 1747945830456);"
+
+    assertApi('sendHttpRequest').wasCalled();
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Request] Appends test query parameter when test mode is enabled'
+  code: |-
+    mockData.testMode = true;
+
+    mock('sendHttpRequest', (url, callback, options, body) => {
+      assertThat(url).isEqualTo('https://api.pinterest.com/v5/ad_accounts/549123456789/events?test=true');
+      callback(200, {}, '');
+    });
+
+    runCode(mockData);
+
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Request] Calls gtmOnSuccess for every 2xx status code'
+  code: |-
+    [200, 201, 299].forEach(statusCode => {
+      cleanup();
+      mock('sendHttpRequest', (url, callback, options, body) => {
+        callback(statusCode, {}, '');
+      });
+
+      runCode(mockData);
+    });
+
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Request] Calls gtmOnFailure for every non 2xx status code'
+  code: |-
+    [199, 300, 404, 500].forEach(statusCode => {
+      cleanup();
+      mock('sendHttpRequest', (url, callback, options, body) => {
+        callback(statusCode, {}, '');
+      });
+
+      runCode(mockData);
+    });
+
+    assertApi('gtmOnFailure').wasCalled();
+    assertApi('gtmOnSuccess').wasNotCalled();
+- name: '[Optimistic Scenario] Calls gtmOnSuccess immediately even if request eventually
+    fails'
+  code: |-
+    mockData.useOptimisticScenario = true;
+
+    let callbackInvoked = false;
+    mock('sendHttpRequest', (url, callback, options, body) => {
+      callbackInvoked = true;
+      callback(500, {}, '');
+    });
+
+    runCode(mockData);
+
+    assertThat(callbackInvoked).isTrue();
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Server Event Data] Auto maps event source url event time and event id'
+  code: |-
+    mock('getAllEventData', () => assign(baseEventData(), {
+      event_id: 'evt1',
+      transaction_id: 'txn1',
+      page_location: 'https://example.com/checkout'
+    }));
+
+    let sentData;
+    mock('sendHttpRequest', (url, callback, options, body) => {
+      sentData = JSON.parse(body).data[0];
+      callback(200, {}, '');
+    });
+
+    runCode(mockData);
+
+    assertThat(sentData.event_source_url).isEqualTo('https://example.com/checkout');
+    assertThat(sentData.event_time).isEqualTo(1747945830);
+    assertThat(sentData.event_id).isEqualTo('evt1');
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Server Event Data] Falls back to transaction id when event id is not provided'
+  code: |-
+    mock('getAllEventData', () => assign(baseEventData(), { event_id: undefined, transaction_id: 'txn1' }));
+
+    let sentData;
+    mock('sendHttpRequest', (url, callback, options, body) => {
+      sentData = JSON.parse(body).data[0];
+      callback(200, {}, '');
+    });
+
+    runCode(mockData);
+
+    assertThat(sentData.event_id).isEqualTo('txn1');
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Server Event Data] Skipped entirely when auto map is disabled'
+  code: |-
+    mockData.autoMapServerEventDataParameters = false;
+    mock('getAllEventData', () => assign(baseEventData(), {
+      event_id: 'evt1',
+      page_location: 'https://example.com/checkout'
+    }));
+
+    let sentData;
+    mock('sendHttpRequest', (url, callback, options, body) => {
+      sentData = JSON.parse(body).data[0];
+      callback(200, {}, '');
+    });
+
+    runCode(mockData);
+
+    assertThat(sentData.event_source_url).isUndefined();
+    assertThat(sentData.event_id).isUndefined();
+    assertThat(sentData.event_time).isUndefined();
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[User Data] Auto maps user data fields from fallback chains'
+  code: |-
+    mock('getAllEventData', () => ({
+      event_name: 'purchase',
+      page_location: 'https://example.com/checkout',
+      ip_override: '203.0.113.5',
+      user_agent: 'TestAgent/1.0',
+      external_id: 'ext123',
+      lastName: 'Doe',
+      firstName: 'John',
+      email: 'test@example.com',
+      phone: '+1 234-567-8900',
+      city: 'New York',
+      state: 'NY',
+      zip: '10001',
+      countryCode: 'US',
+      gender: 'm',
+      db: '19900101',
+      hashed_maids: 'maid123'
+    }));
+
+    let sentUserData;
+    mock('sendHttpRequest', (url, callback, options, body) => {
+      sentUserData = JSON.parse(body).data[0].user_data;
+      callback(200, {}, '');
+    });
+
+    runCode(mockData);
+
+    assertThat(sentUserData.client_ip_address).isEqualTo('203.0.113.5');
+    assertThat(sentUserData.client_user_agent).isEqualTo('TestAgent/1.0');
+    assertThat(sentUserData.external_id).isEqualTo(['e90f8ebece18574d492ba9c500ea0f6b260cc33bc62918efe683893a29e84d86']);
+    assertThat(sentUserData.ln).isEqualTo(['799ef92a11af918e3fb741df42934f3b568ed2d93ac1df74f1b8d41a27932a6f']);
+    assertThat(sentUserData.fn).isEqualTo(['96d9632f363564cc3032521409cf22a852f2032eec099ed5967c0d000cec607a']);
+    assertThat(sentUserData.em).isEqualTo(['973dfe463ec85785f5f95af5ba3906eedb2d931c24e69824a89ea65dba4e813b']);
+    assertThat(sentUserData.ph).isEqualTo(['a8476735b37a541a38402a2e7037c79e2d217fe9780e5e34347156ef61eff42b']);
+    assertThat(sentUserData.ct).isEqualTo(['350c754ba4d38897693aa077ef43072a859d23f613443133fecbbd90a3512ca5']);
+    assertThat(sentUserData.st).isEqualTo(['1b06e2003f8420d6fa42badd8f77ec0f706b976b7a48b13c567dc5a559681683']);
+    assertThat(sentUserData.zp).isEqualTo(['e443169117a184f91186b401133b20be670c7c0896f9886075e5d9b81e9d076b']);
+    assertThat(sentUserData.country).isEqualTo(['79adb2a2fce5c6ba215fe5f27f532d4e7edbac4b6a5e09e1ef3a08084a904621']);
+    assertThat(sentUserData.ge).isEqualTo(['62c66a7a5dd70c3146618063c344e531e6d4b59e379808443ce962b3abd63c5a']);
+    assertThat(sentUserData.db).isEqualTo(['d6165fc8037886424321260c0f9c2a76f7d8d545a02f95c70da9952a13299f33']);
+    assertThat(sentUserData.hashed_maids).isEqualTo(['4827ccf06c94eb067a4884dfa5a6d1a61f2ca2f26a173c358495edb47a174e29']);
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[User Data] Falls back to sha256 email first name and last name fields'
+  code: |-
+    mock('getAllEventData', () => ({
+      event_name: 'purchase',
+      page_location: 'https://example.com/checkout',
+      user_data: {
+        sha256_email_address: 'test@example.com',
+        address: {
+          sha256_first_name: 'John',
+          sha256_last_name: 'Doe'
+        }
+      }
+    }));
+
+    let sentUserData;
+    mock('sendHttpRequest', (url, callback, options, body) => {
+      sentUserData = JSON.parse(body).data[0].user_data;
+      callback(200, {}, '');
+    });
+
+    runCode(mockData);
+
+    assertThat(sentUserData.em).isEqualTo(['973dfe463ec85785f5f95af5ba3906eedb2d931c24e69824a89ea65dba4e813b']);
+    assertThat(sentUserData.fn).isEqualTo(['96d9632f363564cc3032521409cf22a852f2032eec099ed5967c0d000cec607a']);
+    assertThat(sentUserData.ln).isEqualTo(['799ef92a11af918e3fb741df42934f3b568ed2d93ac1df74f1b8d41a27932a6f']);
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[User Data] Ip address and user agent are only mapped for web action source'
+  code: |-
+    mockData.actionSource = 'offline';
+    mock('getAllEventData', () => assign(baseEventData(), {
+      ip_override: '203.0.113.5',
+      user_agent: 'TestAgent/1.0'
+    }));
+
+    let sentUserData;
+    mock('sendHttpRequest', (url, callback, options, body) => {
+      sentUserData = JSON.parse(body).data[0].user_data;
+      callback(200, {}, '');
+    });
+
+    runCode(mockData);
+
+    assertThat(sentUserData.client_ip_address).isUndefined();
+    assertThat(sentUserData.client_user_agent).isUndefined();
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[User Data] Click id resolves from URL cookie or event data in priority order'
+  code: |-
+    [
+      { pageLocation: 'https://example.com/checkout?epik=fromUrl', cookie: 'fromCookie', commonCookie: { _epik: 'fromCommonCookie' }, underscoreEpik: '_epikField', epik: 'epikField', clickId: 'clickIdField', expected: 'fromUrl' },
+      { pageLocation: 'https://example.com/checkout', cookie: 'fromCookie', commonCookie: { _epik: 'fromCommonCookie' }, underscoreEpik: '_epikField', epik: 'epikField', clickId: 'clickIdField', expected: 'fromCookie' },
+      { pageLocation: 'https://example.com/checkout', cookie: undefined, commonCookie: { _epik: 'fromCommonCookie' }, underscoreEpik: '_epikField', epik: 'epikField', clickId: 'clickIdField', expected: 'fromCommonCookie' },
+      { pageLocation: 'https://example.com/checkout', cookie: undefined, commonCookie: {}, underscoreEpik: '_epikField', epik: 'epikField', clickId: 'clickIdField', expected: '_epikField' },
+      { pageLocation: 'https://example.com/checkout', cookie: undefined, commonCookie: {}, underscoreEpik: undefined, epik: 'epikField', clickId: 'clickIdField', expected: 'epikField' },
+      { pageLocation: 'https://example.com/checkout', cookie: undefined, commonCookie: {}, underscoreEpik: undefined, epik: undefined, clickId: 'clickIdField', expected: 'clickIdField' }
+    ].forEach(scenario => {
+      cleanup();
+      mock('getCookieValues', (name) => {
+        if (name === '_epik' && scenario.cookie) return [scenario.cookie];
+        return [];
+      });
+      mock('getAllEventData', () => ({
+        event_name: 'purchase',
+        page_location: scenario.pageLocation,
+        common_cookie: scenario.commonCookie,
+        _epik: scenario.underscoreEpik,
+        epik: scenario.epik,
+        click_id: scenario.clickId
+      }));
+
+      let sentClickId;
+      mock('sendHttpRequest', (url, callback, options, body) => {
+        sentClickId = JSON.parse(body).data[0].user_data.click_id;
+        callback(200, {}, '');
+      });
+
+      runCode(mockData);
+
+      assertThat(sentClickId).isEqualTo(scenario.expected);
+      assertApi('gtmOnSuccess').wasCalled();
+      assertApi('gtmOnFailure').wasNotCalled();
+    });
+- name: '[User Data] Skipped entirely when auto map is disabled'
+  code: |-
+    mockData.autoMapUserDataParameters = false;
+    mock('getAllEventData', () => assign(baseEventData(), { email: 'test@example.com', firstName: 'John' }));
+
+    let sentUserData;
+    mock('sendHttpRequest', (url, callback, options, body) => {
+      sentUserData = JSON.parse(body).data[0].user_data;
+      callback(200, {}, '');
+    });
+
+    runCode(mockData);
+
+    assertThat(sentUserData).isEqualTo({});
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Cookie] Sets epik cookie when epik query parameter is present in URL'
+  code: |-
+    mock('getAllEventData', () => assign(baseEventData(), { page_location: 'https://example.com/checkout?epik=abc123' }));
+
+    mock('setCookie', (name, value, options) => {
+      assertThat(name).isEqualTo('_epik');
+      assertThat(value).isEqualTo('abc123');
+      assertThat(options.domain).isEqualTo('auto');
+    });
+
+    runCode(mockData);
+
+    assertApi('setCookie').wasCalled();
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Ecommerce Data] Maps items contents value currency and content ids'
+  code: |-
+    mock('getAllEventData', () => ({
+      event_name: 'purchase',
+      page_location: 'https://example.com/checkout',
+      currency: 'USD',
+      search_term: 'shoes',
+      transaction_id: 'txn1',
+      content_name: 'Cool Shoes',
+      content_category: 'Footwear',
+      content_brand: 'Acme',
+      items: [
+        { item_id: 'sku1', quantity: 2, price: 10, currency: 'USD' },
+        { item_id: 'sku2', quantity: 1, price: 30, currency: 'USD' }
+      ]
+    }));
+
+    let sentCustomData;
+    mock('sendHttpRequest', (url, callback, options, body) => {
+      sentCustomData = JSON.parse(body).data[0].custom_data;
+      callback(200, {}, '');
+    });
+
+    runCode(mockData);
+
+    assertThat(sentCustomData.contents).isEqualTo([
+      { id: 'sku1', quantity: 2, item_price: '10' },
+      { id: 'sku2', quantity: 1, item_price: '30' }
+    ]);
+    assertThat(sentCustomData.content_ids).containsExactly('sku1', 'sku2');
+    assertThat(sentCustomData.num_items).isEqualTo(3);
+    assertThat(sentCustomData.value).isEqualTo('50');
+    assertThat(sentCustomData.currency).isEqualTo('USD');
+    assertThat(sentCustomData.search_string).isEqualTo('shoes');
+    assertThat(sentCustomData.order_id).isEqualTo('txn1');
+    assertThat(sentCustomData.content_name).isEqualTo('Cool Shoes');
+    assertThat(sentCustomData.content_category).isEqualTo('Footwear');
+    assertThat(sentCustomData.content_brand).isEqualTo('Acme');
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Ecommerce Data] Falls back to ecommerce items when items is not present'
+  code: |-
+    mock('getAllEventData', () => ({
+      event_name: 'purchase',
+      page_location: 'https://example.com/checkout',
+      ecommerce: {
+        items: [
+          { item_id: 'sku3', quantity: 1, price: 15, currency: 'EUR' }
+        ]
+      }
+    }));
+
+    let sentCustomData;
+    mock('sendHttpRequest', (url, callback, options, body) => {
+      sentCustomData = JSON.parse(body).data[0].custom_data;
+      callback(200, {}, '');
+    });
+
+    runCode(mockData);
+
+    assertThat(sentCustomData.content_ids).containsExactly('sku3');
+    assertThat(sentCustomData.currency).isEqualTo('EUR');
+    assertThat(sentCustomData.value).isEqualTo('15');
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Ecommerce Data] Skipped entirely when auto map is disabled'
+  code: |-
+    mockData.autoMapCustomDataParameters = false;
+    mock('getAllEventData', () => assign(baseEventData(), { currency: 'USD', value: 100 }));
+
+    let sentCustomData;
+    mock('sendHttpRequest', (url, callback, options, body) => {
+      sentCustomData = JSON.parse(body).data[0].custom_data;
+      callback(200, {}, '');
+    });
+
+    runCode(mockData);
+
+    assertThat(sentCustomData.value).isUndefined();
+    assertThat(sentCustomData.currency).isUndefined();
+    assertThat(sentCustomData.np).isEqualTo('ss-stape');
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Override] Manual user data custom data and server event data override auto
+    mapped values'
+  code: |-
+    mockData.userDataList = [{ name: 'em', value: 'override@example.com' }];
+    mockData.customDataList = [{ name: 'currency', value: 'EUR' }];
+    mockData.serverEventDataList = [{ name: 'event_source_url', value: 'https://override.example.com' }];
+
+    mock('getAllEventData', () => assign(baseEventData(), {
+      email: 'test@example.com',
+      currency: 'USD',
+      page_location: 'https://example.com/checkout'
+    }));
+
+    let sentData;
+    mock('sendHttpRequest', (url, callback, options, body) => {
+      sentData = JSON.parse(body).data[0];
+      callback(200, {}, '');
+    });
+
+    runCode(mockData);
+
+    assertThat(sentData.user_data.em).isEqualTo(['a6fabf007acdb56fe4da708940111f05281f610353625803e1c252ef0867a299']);
+    assertThat(sentData.custom_data.currency).isEqualTo('EUR');
+    assertThat(sentData.event_source_url).isEqualTo('https://override.example.com');
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Cleanup] Removes falsy user data and custom data fields but always keeps
+    custom data value'
+  code: |-
+    mockData.userDataList = [{ name: 'ph', value: '' }];
+    mockData.customDataList = [{ name: 'value', value: 0 }, { name: 'content_brand', value: '' }];
+
+    mock('getAllEventData', () => ({ event_name: 'purchase', page_location: 'https://example.com/checkout' }));
+
+    let sentData;
+    mock('sendHttpRequest', (url, callback, options, body) => {
+      sentData = JSON.parse(body).data[0];
+      callback(200, {}, '');
+    });
+
+    runCode(mockData);
+
+    assertThat(sentData.user_data.hasOwnProperty('ph')).isFalse();
+    assertThat(sentData.custom_data.hasOwnProperty('content_brand')).isFalse();
+    assertThat(sentData.custom_data.value).isEqualTo('0');
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Hashing] Skips hashing when value already looks like a sha256 hash'
+  code: |-
+    const alreadyHashed = '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef';
+    mock('getAllEventData', () => ({
+      event_name: 'purchase',
+      page_location: 'https://example.com/checkout',
+      email: alreadyHashed
+    }));
+
+    let sentEmail;
+    mock('sendHttpRequest', (url, callback, options, body) => {
+      sentEmail = JSON.parse(body).data[0].user_data.em;
+      callback(200, {}, '');
+    });
+
+    runCode(mockData);
+
+    assertThat(sentEmail).isEqualTo([alreadyHashed]);
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Value Types] Converts numeric custom data value to string'
+  code: |-
+    mockData.customDataList = [{ name: 'value', value: 123 }];
+    mock('getAllEventData', () => ({ event_name: 'purchase', page_location: 'https://example.com/checkout' }));
+
+    let sentValue;
+    mock('sendHttpRequest', (url, callback, options, body) => {
+      sentValue = JSON.parse(body).data[0].custom_data.value;
+      callback(200, {}, '');
+    });
+
+    runCode(mockData);
+
+    assertThat(sentValue).isEqualTo('123');
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Value Types] Parses content ids from JSON array string or wraps single string'
+  code: |-
+    [
+      { input: '["a","b"]', expected: ['a', 'b'] },
+      { input: 'single-id', expected: ['single-id'] }
+    ].forEach(scenario => {
+      cleanup();
+      mockData.customDataList = [{ name: 'content_ids', value: scenario.input }];
+      mock('getAllEventData', () => ({ event_name: 'purchase', page_location: 'https://example.com/checkout' }));
+
+      let sentContentIds;
+      mock('sendHttpRequest', (url, callback, options, body) => {
+        sentContentIds = JSON.parse(body).data[0].custom_data.content_ids;
+        callback(200, {}, '');
+      });
+
+      runCode(mockData);
+
+      assertThat(sentContentIds).isEqualTo(scenario.expected);
+      assertApi('gtmOnSuccess').wasCalled();
+      assertApi('gtmOnFailure').wasNotCalled();
+    });
+setup: |-
+  const JSON = require('JSON');
+
+  function assign(target, source) {
+    for (const key in source) {
+      if (source.hasOwnProperty(key)) target[key] = source[key];
+    }
+    return target;
+  }
+
+  function baseEventData() {
+    return {
+      event_name: 'purchase',
+      page_location: 'https://example.com/checkout'
+    };
+  }
+
+  function createMockData() {
+    return {
+      eventType: 'standard',
+      eventNameStandard: 'checkout',
+      eventNameCustom: '',
+      actionSource: 'web',
+      advertiserId: '549123456789',
+      apiAccessToken: 'token123',
+      testMode: false,
+      useOptimisticScenario: false,
+      adStorageConsent: 'optional',
+      autoMapServerEventDataParameters: true,
+      serverEventDataList: [],
+      autoMapUserDataParameters: true,
+      userDataList: [],
+      autoMapCustomDataParameters: true,
+      customDataList: []
+    };
+  }
+
+  const cleanup = () => {
+    mock('getCookieValues', () => []);
+  };
+  cleanup();
+
+  mock('getRequestHeader', (header) => {
+    if (header === 'referer') return 'https://example.com/checkout';
+  });
+
+  mock('getTimestampMillis', 1747945830456);
+
+  mock('getAllEventData', () => baseEventData());
+
+  mock('sendHttpRequest', (url, callback, options, body) => {
+    callback(200, {}, '');
+  });
+
+  mock('setCookie', () => {});
+
+  const mockData = createMockData();
 
 
 ___NOTES___
 
-2026-05-25 Change Notes:
+2026-09-14 - Change Notes:
+  - Add sha256_email_address, sha256_first_name and sha256_last_name as additional auto-mapped user data sources, and document them in the Automap User Data help text.
+  - Extract the Pinterest API request logic into a sendEvent() function so it can be unit tested without changing its behavior.
+  - Add a comprehensive unit test suite covering consent handling, event name mapping, request building, user/server/ecommerce data auto-mapping, manual overrides, hashing and value-type coercion.
+
+2026-05-25 - Change Notes:
  - Logging removal.
 
 2026-04-13 - Change Notes:
