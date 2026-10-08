@@ -35,216 +35,234 @@ ___TEMPLATE_PARAMETERS___
 
 [
   {
-    "type": "RADIO",
-    "name": "eventType",
-    "radioItems": [
+    "type": "GROUP",
+    "name": "configGroup",
+    "subParams": [
       {
-        "value": "standard",
-        "displayValue": "Standard",
-        "subParams": [
+        "type": "RADIO",
+        "name": "eventType",
+        "radioItems": [
           {
-            "type": "SELECT",
-            "name": "eventNameStandard",
-            "macrosInSelect": false,
-            "selectItems": [
+            "value": "standard",
+            "displayValue": "Standard",
+            "subParams": [
               {
-                "value": "page_visit",
-                "displayValue": "page_visit"
-              },
-              {
-                "value": "add_payment_info",
-                "displayValue": "add_payment_info"
-              },
-              {
-                "value": "add_to_cart",
-                "displayValue": "add_to_cart"
-              },
-              {
-                "value": "add_to_wishlist",
-                "displayValue": "add_to_wishlist"
-              },
-              {
-                "value": "app_install",
-                "displayValue": "app_install"
-              },
-              {
-                "value": "app_open",
-                "displayValue": "app_open"
-              },
-              {
-                "value": "checkout",
-                "displayValue": "checkout"
-              },
-              {
-                "value": "contact",
-                "displayValue": "contact"
-              },
-              {
-                "value": "customize_product",
-                "displayValue": "customize_product"
-              },
-              {
-                "value": "find_location",
-                "displayValue": "find_location"
-              },
-              {
-                "value": "initiate_checkout",
-                "displayValue": "initiate_checkout"
-              },
-              {
-                "value": "lead",
-                "displayValue": "lead"
-              },
-              {
-                "value": "schedule",
-                "displayValue": "schedule"
-              },
-              {
-                "value": "search",
-                "displayValue": "search"
-              },
-              {
-                "value": "signup",
-                "displayValue": "signup"
-              },
-              {
-                "value": "start_trial",
-                "displayValue": "start_trial"
-              },
-              {
-                "value": "submit_application",
-                "displayValue": "submit_application"
-              },
-              {
-                "value": "subscribe",
-                "displayValue": "subscribe"
-              },
-              {
-                "value": "view_category",
-                "displayValue": "view_category"
-              },
-              {
-                "value": "view_content",
-                "displayValue": "view_content"
-              },
-              {
-                "value": "watch_video",
-                "displayValue": "watch_video"
-              },
-              {
-                "value": "custom",
-                "displayValue": "custom (legacy - use the \"Custom\" radio button instead)"
+                "type": "SELECT",
+                "name": "eventNameStandard",
+                "macrosInSelect": false,
+                "selectItems": [
+                  {
+                    "value": "page_visit",
+                    "displayValue": "page_visit"
+                  },
+                  {
+                    "value": "add_payment_info",
+                    "displayValue": "add_payment_info"
+                  },
+                  {
+                    "value": "add_to_cart",
+                    "displayValue": "add_to_cart"
+                  },
+                  {
+                    "value": "add_to_wishlist",
+                    "displayValue": "add_to_wishlist"
+                  },
+                  {
+                    "value": "app_install",
+                    "displayValue": "app_install"
+                  },
+                  {
+                    "value": "app_open",
+                    "displayValue": "app_open"
+                  },
+                  {
+                    "value": "checkout",
+                    "displayValue": "checkout"
+                  },
+                  {
+                    "value": "contact",
+                    "displayValue": "contact"
+                  },
+                  {
+                    "value": "customize_product",
+                    "displayValue": "customize_product"
+                  },
+                  {
+                    "value": "find_location",
+                    "displayValue": "find_location"
+                  },
+                  {
+                    "value": "initiate_checkout",
+                    "displayValue": "initiate_checkout"
+                  },
+                  {
+                    "value": "lead",
+                    "displayValue": "lead"
+                  },
+                  {
+                    "value": "schedule",
+                    "displayValue": "schedule"
+                  },
+                  {
+                    "value": "search",
+                    "displayValue": "search"
+                  },
+                  {
+                    "value": "signup",
+                    "displayValue": "signup"
+                  },
+                  {
+                    "value": "start_trial",
+                    "displayValue": "start_trial"
+                  },
+                  {
+                    "value": "submit_application",
+                    "displayValue": "submit_application"
+                  },
+                  {
+                    "value": "subscribe",
+                    "displayValue": "subscribe"
+                  },
+                  {
+                    "value": "view_category",
+                    "displayValue": "view_category"
+                  },
+                  {
+                    "value": "view_content",
+                    "displayValue": "view_content"
+                  },
+                  {
+                    "value": "watch_video",
+                    "displayValue": "watch_video"
+                  },
+                  {
+                    "value": "custom",
+                    "displayValue": "custom (legacy - use the \"Custom\" radio button instead)"
+                  }
+                ],
+                "simpleValueType": true,
+                "defaultValue": "page_visit"
               }
             ],
-            "simpleValueType": true,
-            "defaultValue": "page_visit"
-          }
-        ],
-        "help": ""
-      },
-      {
-        "value": "inherit",
-        "subParams": [],
-        "displayValue": "Inherit from client"
-      },
-      {
-        "value": "custom",
-        "displayValue": "Custom",
-        "subParams": [
+            "help": ""
+          },
           {
-            "type": "TEXT",
-            "name": "eventNameCustom",
-            "displayName": "Event Name",
-            "simpleValueType": true,
-            "valueValidators": [
+            "value": "inherit",
+            "subParams": [],
+            "displayValue": "Inherit from client"
+          },
+          {
+            "value": "custom",
+            "displayValue": "Custom",
+            "subParams": [
               {
-                "type": "NON_EMPTY"
-              },
-              {
-                "type": "REGEX",
-                "args": [
-                  "^[a-zA-Z0-9_-]{1,100}$"
+                "type": "TEXT",
+                "name": "eventNameCustom",
+                "displayName": "Event Name",
+                "simpleValueType": true,
+                "valueValidators": [
+                  {
+                    "type": "NON_EMPTY"
+                  },
+                  {
+                    "type": "REGEX",
+                    "args": [
+                      "^[a-zA-Z0-9_-]{1,100}$"
+                    ]
+                  }
                 ]
               }
-            ]
+            ],
+            "help": "Requirements: \n\u003cul\u003e \n\u003cli\u003eCharacters limit: 100\u003c/li\u003e \n\u003cli\u003eupper- or lower-case letters (treated as case insensitive)\u003c/li\u003e \n\u003cli\u003enumerals 0 through 9\u003c/li\u003e \u003cli\u003eunderscores \"_\"\u003c/li\u003e \n\u003cli\u003ehyphens \"-\"\u003c/li\u003e \n\u003c/ul\u003e\n\u003cbr/\u003e\nYou can custom-define up to 15 types of events for every Pinterest Advertiser ID."
           }
         ],
-        "help": "Requirements: \n\u003cul\u003e \n\u003cli\u003eCharacters limit: 100\u003c/li\u003e \n\u003cli\u003eupper- or lower-case letters (treated as case insensitive)\u003c/li\u003e \n\u003cli\u003enumerals 0 through 9\u003c/li\u003e \u003cli\u003eunderscores \"_\"\u003c/li\u003e \n\u003cli\u003ehyphens \"-\"\u003c/li\u003e \n\u003c/ul\u003e\n\u003cbr/\u003e\nYou can custom-define up to 15 types of events for every Pinterest Advertiser ID."
-      }
-    ],
-    "simpleValueType": true,
-    "displayName": "Event Name Setup Method",
-    "defaultValue": "standard"
-  },
-  {
-    "type": "SELECT",
-    "name": "actionSource",
-    "displayName": "Action Source",
-    "selectItems": [
-      {
-        "value": "web",
-        "displayValue": "Web"
+        "simpleValueType": true,
+        "displayName": "Event Name Setup Method",
+        "defaultValue": "standard"
       },
       {
-        "value": "offline",
-        "displayValue": "Offline"
-      },
-      {
-        "value": "app_ios",
-        "displayValue": "App iOS"
-      },
-      {
-        "value": "app_android",
-        "displayValue": "App Android"
-      }
-    ],
-    "simpleValueType": true,
-    "defaultValue": "web"
-  },
-  {
-    "type": "TEXT",
-    "name": "advertiserId",
-    "displayName": "Pinterest Advertiser ID",
-    "simpleValueType": true,
-    "valueValidators": [
-      {
-        "type": "NON_EMPTY"
-      },
-      {
-        "type": "REGEX",
-        "args": [
-          "549\\d{9}"
+        "type": "SELECT",
+        "name": "actionSource",
+        "displayName": "Action Source",
+        "selectItems": [
+          {
+            "value": "web",
+            "displayValue": "Web"
+          },
+          {
+            "value": "offline",
+            "displayValue": "Offline"
+          },
+          {
+            "value": "app_ios",
+            "displayValue": "App iOS"
+          },
+          {
+            "value": "app_android",
+            "displayValue": "App Android"
+          }
         ],
-        "errorMessage": "This value should match 549XXXXXXXXX"
-      }
-    ],
-    "help": "To find your Advertiser ID, log into \u003ca href\u003d\"https://ads.pinterest.com\"\u003ePinterest Ads\u003c/a\u003e and select the account that will receive your Conversion API events.\n\u003cbr/\u003e\u003cbr/\u003e\n\u003cb\u003eOption 1: Navigation Menu\u003c/b\u003e\n\u003cbr/\u003e\nClick the dropdown menu in the top-right corner. Your \u003cb\u003eAdvertiser ID\u003c/b\u003e is the number listed directly beneath the Ad Account Name.\n\u003cbr/\u003e\u003cbr/\u003e\n\u003cb\u003eOption 2: Browser URL\u003c/b\u003e\n\u003cbr/\u003e\nLook at the URL in your browser’s address bar. The ID is the numeric string starting with \"549\" following \"advertiser/\": \n\u003ci\u003e\"ads.pinterest.com/advertiser/\u003cb\u003eADVERTISER_ID\u003c/b\u003e/...\"\u003c/i\u003e\n\u003cbr/\u003e\u003cbr/\u003e\n\u003ci\u003eNote: If you manage multiple accounts, ensure you\u0027ve selected the correct one before copying the ID.\u003c/i\u003e"
-  },
-  {
-    "type": "TEXT",
-    "name": "apiAccessToken",
-    "displayName": "API Access Token",
-    "simpleValueType": true,
-    "help": "To use the Pinterest Conversions API, you need an access token.\n\u003cbr/\u003e\nYou can obtain it in \u003ca href\u003d\"https://ads.pinterest.com\"\u003ePinterest Ads\u003c/a\u003e by clicking on the hamburger menu in the top-left corner, and following this path \u003ci\u003eConversions \u003e Conversions API \u003e Set up API\u003c/i\u003e.",
-    "valueValidators": [
+        "simpleValueType": true,
+        "defaultValue": "web"
+      },
       {
-        "type": "NON_EMPTY"
+        "type": "TEXT",
+        "name": "advertiserId",
+        "displayName": "Pinterest Advertiser ID",
+        "simpleValueType": true,
+        "valueValidators": [
+          {
+            "type": "NON_EMPTY"
+          },
+          {
+            "type": "REGEX",
+            "args": [
+              "549\\d{9}"
+            ],
+            "errorMessage": "This value should match 549XXXXXXXXX"
+          }
+        ],
+        "help": "To find your Advertiser ID, log into \u003ca href\u003d\"https://ads.pinterest.com\"\u003ePinterest Ads\u003c/a\u003e and select the account that will receive your Conversion API events.\n\u003cbr/\u003e\u003cbr/\u003e\n\u003cb\u003eOption 1: Navigation Menu\u003c/b\u003e\n\u003cbr/\u003e\nClick the dropdown menu in the top-right corner. Your \u003cb\u003eAdvertiser ID\u003c/b\u003e is the number listed directly beneath the Ad Account Name.\n\u003cbr/\u003e\u003cbr/\u003e\n\u003cb\u003eOption 2: Browser URL\u003c/b\u003e\n\u003cbr/\u003e\nLook at the URL in your browser’s address bar. The ID is the numeric string starting with \"549\" following \"advertiser/\": \n\u003ci\u003e\"ads.pinterest.com/advertiser/\u003cb\u003eADVERTISER_ID\u003c/b\u003e/...\"\u003c/i\u003e\n\u003cbr/\u003e\u003cbr/\u003e\n\u003ci\u003eNote: If you manage multiple accounts, ensure you\u0027ve selected the correct one before copying the ID.\u003c/i\u003e"
+      },
+      {
+        "type": "TEXT",
+        "name": "apiAccessToken",
+        "displayName": "API Access Token",
+        "simpleValueType": true,
+        "help": "To use the Pinterest Conversions API, you need an access token.\n\u003cbr/\u003e\nYou can obtain it in \u003ca href\u003d\"https://ads.pinterest.com\"\u003ePinterest Ads\u003c/a\u003e by clicking on the hamburger menu in the top-left corner, and following this path \u003ci\u003eConversions \u003e Conversions API \u003e Set up API\u003c/i\u003e.",
+        "valueValidators": [
+          {
+            "type": "NON_EMPTY"
+          }
+        ]
+      },
+      {
+        "type": "SELECT",
+        "name": "testMode",
+        "displayName": "Test Mode",
+        "macrosInSelect": true,
+        "selectItems": [
+          {
+            "value": false,
+            "displayValue": "false"
+          },
+          {
+            "value": true,
+            "displayValue": "true"
+          }
+        ],
+        "simpleValueType": true,
+        "notSetText": "(not set)",
+        "help": "If \u003ci\u003etrue\u003c/i\u003e the events will not be recorded but the API will still return the same response messages. Use this mode to verify your requests are working and your events are constructed correctly before deploying the tag."
+      },
+      {
+        "type": "CHECKBOX",
+        "name": "useOptimisticScenario",
+        "checkboxText": "Use Optimistic Scenario",
+        "simpleValueType": true,
+        "help": "The tag will call gtmOnSuccess() without waiting for a response from the API. This will speed up sGTM response time however your tag will always return the status fired successfully even in case it is not."
       }
     ]
-  },
-  {
-    "type": "CHECKBOX",
-    "name": "testMode",
-    "checkboxText": "Test Mode",
-    "simpleValueType": true,
-    "help": "The events will not be recorded but the API will still return the same response messages. Use this mode to verify your requests are working and your events are constructed correctly."
-  },
-  {
-    "type": "CHECKBOX",
-    "name": "useOptimisticScenario",
-    "checkboxText": "Use Optimistic Scenario",
-    "simpleValueType": true,
-    "help": "The tag will call gtmOnSuccess() without waiting for a response from the API. This will speed up sGTM response time however your tag will always return the status fired successfully even in case it is not."
   },
   {
     "displayName": "Server Event Data Override",
@@ -293,7 +311,7 @@ ___TEMPLATE_PARAMETERS___
               },
               {
                 "value": "app_id",
-                "displayValue": "App id"
+                "displayValue": "App ID"
               },
               {
                 "value": "app_name",
@@ -357,7 +375,7 @@ ___TEMPLATE_PARAMETERS___
         "name": "autoMapUserDataParameters",
         "checkboxText": "Automap User Data Parameters",
         "simpleValueType": true,
-        "help": "If enabled, the tag will attempt to automatically map parameters from the Event Data.\n\u003cbr/\u003e\u003cbr/\u003e\nAny value you manually enter in a field below will always override the auto-mapped value.\n\u003cbr/\u003e\u003cbr/\u003e\nDefault mappings:\n\u003cul\u003e\n\u003cli\u003e\u003cb\u003eEmail:\u003c/b\u003e \u003ci\u003eeventData.email\u003c/i\u003e, \u003ci\u003eeventData.user_data.email_address\u003c/i\u003e, \u003ci\u003eeventData.user_data.email\u003c/i\u003e, \u003ci\u003eeventData.user_data.sha256_email_address\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003ePhone:\u003c/b\u003e \u003ci\u003eeventData.phone\u003c/i\u003e, \u003ci\u003eeventData.user_data.phone_number\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eFirst Name:\u003c/b\u003e \u003ci\u003eeventData.firstName\u003c/i\u003e, \u003ci\u003eeventData.FirstName\u003c/i\u003e, \u003ci\u003eeventData.nameFirst\u003c/i\u003e, \u003ci\u003eeventData.first_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.first_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.first_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.sha256_first_name\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eLast Name:\u003c/b\u003e \u003ci\u003eeventData.lastName\u003c/i\u003e, \u003ci\u003eeventData.LastName\u003c/i\u003e, \u003ci\u003eeventData.nameLast\u003c/i\u003e, \u003ci\u003eeventData.last_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.last_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.last_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.sha256_last_name\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eCity:\u003c/b\u003e \u003ci\u003eeventData.city\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.city\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eState:\u003c/b\u003e \u003ci\u003eeventData.state\u003c/i\u003e, \u003ci\u003eeventData.region\u003c/i\u003e, \u003ci\u003eeventData.user_data.region\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.region\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eZIP Code:\u003c/b\u003e \u003ci\u003eeventData.zip\u003c/i\u003e, \u003ci\u003eeventData.postal_code\u003c/i\u003e, \u003ci\u003eeventData.user_data.postal_code\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.postal_code\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eCountry:\u003c/b\u003e \u003ci\u003eeventData.countryCode\u003c/i\u003e, \u003ci\u003eeventData.country\u003c/i\u003e, \u003ci\u003eeventData.user_data.country\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.country\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eGender:\u003c/b\u003e \u003ci\u003eeventData.gender\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eDate of Birth:\u003c/b\u003e \u003ci\u003eeventData.db\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eMobile Advertising ID:\u003c/b\u003e \u003ci\u003eeventData.hashed_maids\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eExternal ID:\u003c/b\u003e \u003ci\u003eeventData.external_id\u003c/i\u003e, \u003ci\u003eeventData.user_id\u003c/i\u003e, \u003ci\u003eeventData.userId\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eIP Address:\u003c/b\u003e \u003ci\u003eeventData.ip_override\u003c/i\u003e (only when Action Source is Web)\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eUser Agent:\u003c/b\u003e \u003ci\u003eeventData.user_agent\u003c/i\u003e (only when Action Source is Web)\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eClick ID:\u003c/b\u003e \u003ci\u003eepik URL parameter\u003c/i\u003e, \u003ci\u003e_epik cookie\u003c/i\u003e, \u003ci\u003eeventData.common_cookie._epik\u003c/i\u003e, \u003ci\u003eeventData._epik\u003c/i\u003e, \u003ci\u003eeventData.epik\u003c/i\u003e, \u003ci\u003eeventData.click_id\u003c/i\u003e\u003c/li\u003e\n\u003c/ul\u003e",
+        "help": "If enabled, the tag will attempt to automatically map parameters from the Event Data.\n\u003cbr/\u003e\u003cbr/\u003e\nAny value you manually enter in a field below will always override the auto-mapped value.\n\u003cbr/\u003e\u003cbr/\u003e\nDefault mappings:\n\u003cul\u003e\n\u003cli\u003e\u003cb\u003eEmail:\u003c/b\u003e \u003ci\u003eeventData.email\u003c/i\u003e, \u003ci\u003eeventData.user_data.email_address\u003c/i\u003e, \u003ci\u003eeventData.user_data.email\u003c/i\u003e, \u003ci\u003eeventData.user_data.sha256_email_address\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003ePhone:\u003c/b\u003e \u003ci\u003eeventData.phone\u003c/i\u003e, \u003ci\u003eeventData.user_data.phone_number\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eFirst Name:\u003c/b\u003e \u003ci\u003eeventData.firstName\u003c/i\u003e, \u003ci\u003eeventData.FirstName\u003c/i\u003e, \u003ci\u003eeventData.nameFirst\u003c/i\u003e, \u003ci\u003eeventData.first_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.first_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.first_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.sha256_first_name\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eLast Name:\u003c/b\u003e \u003ci\u003eeventData.lastName\u003c/i\u003e, \u003ci\u003eeventData.LastName\u003c/i\u003e, \u003ci\u003eeventData.nameLast\u003c/i\u003e, \u003ci\u003eeventData.last_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.last_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.last_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.sha256_last_name\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eCity:\u003c/b\u003e \u003ci\u003eeventData.city\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.city\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eState:\u003c/b\u003e \u003ci\u003eeventData.state\u003c/i\u003e, \u003ci\u003eeventData.region\u003c/i\u003e, \u003ci\u003eeventData.user_data.region\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.region\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eZIP Code:\u003c/b\u003e \u003ci\u003eeventData.zip\u003c/i\u003e, \u003ci\u003eeventData.postal_code\u003c/i\u003e, \u003ci\u003eeventData.user_data.postal_code\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.postal_code\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eCountry:\u003c/b\u003e \u003ci\u003eeventData.countryCode\u003c/i\u003e, \u003ci\u003eeventData.country\u003c/i\u003e, \u003ci\u003eeventData.user_data.country\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.country\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eGender:\u003c/b\u003e \u003ci\u003eeventData.gender\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eDate of Birth:\u003c/b\u003e \u003ci\u003eeventData.db\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eMobile Advertising ID:\u003c/b\u003e \u003ci\u003eeventData.hashed_maids\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eExternal ID:\u003c/b\u003e \u003ci\u003eeventData.external_id\u003c/i\u003e, \u003ci\u003eeventData.user_id\u003c/i\u003e, \u003ci\u003eeventData.userId\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eIP Address:\u003c/b\u003e \u003ci\u003eeventData.ip_override\u003c/i\u003e (only when Action Source is Web)\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eUser Agent:\u003c/b\u003e \u003ci\u003eeventData.user_agent\u003c/i\u003e (only when Action Source is Web)\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eClick ID:\u003c/b\u003e \u003ci\u003eepik URL parameter\u003c/i\u003e, \u003ci\u003e_epik cookie\u003c/i\u003e, \u003ci\u003eeventData.common_cookie._epik\u003c/i\u003e, \u003ci\u003eeventData._epik\u003c/i\u003e, \u003ci\u003eeventData.epik\u003c/i\u003e, \u003ci\u003eeventData.click_id\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eCustomer Type:\u003c/b\u003e \u003ci\u003eeventData.customer_type\u003c/i\u003e\u003c/li\u003e\n\u003c/ul\u003e",
         "defaultValue": true
       },
       {
@@ -434,6 +452,10 @@ ___TEMPLATE_PARAMETERS___
               {
                 "value": "click_id",
                 "displayValue": "Click ID"
+              },
+              {
+                "value": "customer_type",
+                "displayValue": "Customer Type (\"new\"/\"returning\")"
               }
             ]
           },
@@ -526,6 +548,14 @@ ___TEMPLATE_PARAMETERS___
               {
                 "value": "predicted_ltv",
                 "displayValue": "Predicted Lifetime Value (LTV)"
+              },
+              {
+                "value": "external_measurement_id",
+                "displayValue": "External Measurement ID"
+              },
+              {
+                "value": "external_measurement_vendor_id",
+                "displayValue": "External Measurement Vendor ID"
               }
             ]
           },
@@ -617,7 +647,7 @@ function sendEvent(data, mappedEventData) {
     'https://api.pinterest.com/v5/ad_accounts/' +
     encodeUri(data.advertiserId) +
     '/events' +
-    (data.testMode ? '?test=true' : '');
+    (isUIFieldTrue(data.testMode) ? '?test=true' : '');
   const postBody = { data: [mappedEventData] };
 
   sendHttpRequest(
@@ -979,6 +1009,9 @@ function addUserData(eventData, mappedData) {
       eventData.click_id ||
       '';
     if (clickId) mappedData.user_data.click_id = clickId;
+
+    const customerType = eventData.customer_type;
+    if (customerType) mappedData.user_data.customer_type = customerType;
   }
 
   return mappedData;
@@ -1028,6 +1061,12 @@ function fixValueTypes(mappedData) {
     mappedData.custom_data.value = makeString(mappedData.custom_data.value);
   }
 
+  if (getType(mappedData.custom_data.external_measurement_vendor_id) === 'string') {
+    mappedData.custom_data.external_measurement_vendor_id = makeInteger(
+      mappedData.custom_data.external_measurement_vendor_id
+    );
+  }
+
   if (mappedData.custom_data.contents) {
     if (getType(mappedData.custom_data.contents) === 'string') {
       mappedData.custom_data.contents = JSON.parse(mappedData.custom_data.contents);
@@ -1071,6 +1110,10 @@ function shouldExitEarly(data, eventData) {
 
 function getUrl(eventData) {
   return eventData.page_location || eventData.page_referrer || getRequestHeader('referer');
+}
+
+function isUIFieldTrue(field) {
+  return [true, 'true'].indexOf(field) !== -1;
 }
 
 function isHashed(value) {
@@ -1903,6 +1946,55 @@ scenarios:
     assertThat(sentValue).isEqualTo('123');
     assertApi('gtmOnSuccess').wasCalled();
     assertApi('gtmOnFailure').wasNotCalled();
+- name: '[User Data] Auto maps customer type without hashing'
+  code: |-
+    mock('getAllEventData', () => ({
+      event_name: 'purchase',
+      page_location: 'https://example.com/checkout',
+      customer_type: 'returning'
+    }));
+
+    let sentUserData;
+    mock('sendHttpRequest', (url, callback, options, body) => {
+      sentUserData = JSON.parse(body).data[0].user_data;
+      callback(200, {}, '');
+    });
+
+    runCode(mockData);
+
+    assertThat(sentUserData.customer_type).isEqualTo('returning');
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Request] Test mode accepts string true and ignores string false'
+  code: |-
+    [['true', '?test=true'], ['false', '']].forEach(scenario => {
+      cleanup();
+      mockData.testMode = scenario[0];
+      mock('sendHttpRequest', (url, callback, options, body) => {
+        assertThat(url).isEqualTo('https://api.pinterest.com/v5/ad_accounts/549123456789/events' + scenario[1]);
+        callback(200, {}, '');
+      });
+
+      runCode(mockData);
+
+      assertApi('gtmOnSuccess').wasCalled();
+    });
+- name: '[Value Types] Converts external measurement vendor id string to integer'
+  code: |-
+    mockData.customDataList = [{ name: 'external_measurement_vendor_id', value: '42' }];
+    mock('getAllEventData', () => ({ event_name: 'purchase', page_location: 'https://example.com/checkout' }));
+
+    let sentVendorId;
+    mock('sendHttpRequest', (url, callback, options, body) => {
+      sentVendorId = JSON.parse(body).data[0].custom_data.external_measurement_vendor_id;
+      callback(200, {}, '');
+    });
+
+    runCode(mockData);
+
+    assertThat(sentVendorId).isEqualTo(42);
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
 - name: '[Value Types] Parses content ids from JSON array string or wraps single string'
   code: |-
     [
@@ -1985,6 +2077,13 @@ setup: |-
 
 
 ___NOTES___
+
+2026-10-08 - Change Notes:
+  - Add Pinterest's new user_data.customer_type ("new"/"returning") as a manual User Data option and auto-map it unhashed from eventData.customer_type.
+  - Add external_measurement_id and external_measurement_vendor_id as manual Custom Data options; the vendor ID is converted to an integer, matching the Pinterest API schema.
+  - Change Test Mode from a checkbox to a select that accepts variables, so it can be toggled per environment; true and "true" both enable it, and existing checkbox values keep working.
+  - Group the core configuration fields and fix the "App ID" label.
+  - Add unit tests for customer type auto-mapping, string Test Mode values and vendor ID coercion.
 
 2026-09-14 - Change Notes:
   - Add sha256_email_address, sha256_first_name and sha256_last_name as additional auto-mapped user data sources, and document them in the Automap User Data help text.

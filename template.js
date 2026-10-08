@@ -42,7 +42,7 @@ function sendEvent(data, mappedEventData) {
     'https://api.pinterest.com/v5/ad_accounts/' +
     encodeUri(data.advertiserId) +
     '/events' +
-    (data.testMode ? '?test=true' : '');
+    (isUIFieldTrue(data.testMode) ? '?test=true' : '');
   const postBody = { data: [mappedEventData] };
 
   sendHttpRequest(
@@ -404,6 +404,9 @@ function addUserData(eventData, mappedData) {
       eventData.click_id ||
       '';
     if (clickId) mappedData.user_data.click_id = clickId;
+
+    const customerType = eventData.customer_type;
+    if (customerType) mappedData.user_data.customer_type = customerType;
   }
 
   return mappedData;
@@ -453,6 +456,12 @@ function fixValueTypes(mappedData) {
     mappedData.custom_data.value = makeString(mappedData.custom_data.value);
   }
 
+  if (getType(mappedData.custom_data.external_measurement_vendor_id) === 'string') {
+    mappedData.custom_data.external_measurement_vendor_id = makeInteger(
+      mappedData.custom_data.external_measurement_vendor_id
+    );
+  }
+
   if (mappedData.custom_data.contents) {
     if (getType(mappedData.custom_data.contents) === 'string') {
       mappedData.custom_data.contents = JSON.parse(mappedData.custom_data.contents);
@@ -496,6 +505,10 @@ function shouldExitEarly(data, eventData) {
 
 function getUrl(eventData) {
   return eventData.page_location || eventData.page_referrer || getRequestHeader('referer');
+}
+
+function isUIFieldTrue(field) {
+  return [true, 'true'].indexOf(field) !== -1;
 }
 
 function isHashed(value) {
