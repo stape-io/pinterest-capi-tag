@@ -1,14 +1,16 @@
-const JSON = require('JSON');
-const Math = require('Math');
-const Object = require('Object');
+const computeEffectiveTldPlusOne = require('computeEffectiveTldPlusOne');
+const createRegex = require('createRegex');
 const encodeUri = require('encodeUri');
 const getAllEventData = require('getAllEventData');
 const getCookieValues = require('getCookieValues');
 const getRequestHeader = require('getRequestHeader');
 const getTimestampMillis = require('getTimestampMillis');
 const getType = require('getType');
+const JSON = require('JSON');
 const makeInteger = require('makeInteger');
 const makeString = require('makeString');
+const Math = require('Math');
+const Object = require('Object');
 const parseUrl = require('parseUrl');
 const sendHttpRequest = require('sendHttpRequest');
 const setCookie = require('setCookie');
@@ -23,7 +25,12 @@ if (shouldExitEarly(data, eventData)) {
   return data.gtmOnSuccess();
 }
 
-setClickIdCookieIfNeeded(eventData);
+const WHITESPACE_REGEX = createRegex('[\\s\\p{Z}]', 'g');
+const PUNCTUATION_REGEX = createRegex('[\\p{P}\\p{S}]', 'g');
+const NON_DIGITS_REGEX = createRegex('[^0-9]', 'g');
+const ZIP_SEPARATORS_REGEX = createRegex('[\\s\\p{Z}\\p{Pd}]', 'g');
+
+setClickIdCookieIfNeeded(data, eventData);
 
 const mappedEventData = mapEvent(eventData, data);
 
@@ -107,7 +114,7 @@ function mapEvent(eventData, data) {
 
   let mappedData = {
     event_name: eventName,
-    action_source: data.actionSource || 'web',
+    action_source: getActionSource(data),
     partner_name: 'ss-stape',
     custom_data: {
       np: 'ss-stape'
@@ -120,13 +127,18 @@ function mapEvent(eventData, data) {
   mappedData = addEcommerceData(eventData, mappedData);
   mappedData = overrideDataIfNeeded(data, mappedData);
   mappedData = fixValueTypes(mappedData);
-  mappedData = cleanupData(mappedData);
   mappedData = hashDataIfNeeded(mappedData);
+  mappedData = cleanupData(mappedData);
 
   return mappedData;
 }
 
-function hashData(key, value) {
+function getActionSource(data) {
+  if (!isValidValue(data.actionSource)) return 'web';
+  return makeString(data.actionSource).trim().toLowerCase() || 'web';
+}
+
+function hashData(value, normalize) {
   if (!value) return value;
 
   const type = getType(value);
@@ -134,71 +146,117 @@ function hashData(key, value) {
   if (value === 'undefined' || value === 'null') return undefined;
 
   if (type === 'array') {
-    return value.map((val) => hashData(key, val));
+    const hashedValues = value.map((val) => hashData(val, normalize)).filter((val) => !!val);
+    return hashedValues.length ? hashedValues : undefined;
   }
 
   if (type === 'object') {
     return Object.keys(value).reduce((acc, val) => {
-      acc[val] = hashData(val, value[val]);
+      acc[val] = hashData(value[val], normalize);
       return acc;
     }, {});
   }
 
   if (isHashed(value)) return value;
 
-  value = makeString(value).trim().toLowerCase();
+  const normalizedValue = normalize(makeString(value));
+  if (!normalizedValue) return undefined;
 
-  if (key === 'ph') {
-    value = value
-      .split(' ')
-      .join('')
-      .split('-')
-      .join('')
-      .split('(')
-      .join('')
-      .split(')')
-      .join('')
-      .split('+')
-      .join('');
-  } else if (key === 'ct') {
-    value = value.split(' ').join('');
-  }
-
-  return sha256Sync(value, { outputEncoding: 'hex' });
+  return sha256Sync(normalizedValue, { outputEncoding: 'hex' });
 }
 
 function hashDataIfNeeded(mappedData) {
-  if (mappedData.user_data) {
-    for (let key in mappedData.user_data) {
-      if (
-        key === 'em' ||
-        key === 'ph' ||
-        key === 'ge' ||
-        key === 'db' ||
-        key === 'ln' ||
-        key === 'fn' ||
-        key === 'ct' ||
-        key === 'st' ||
-        key === 'zp' ||
-        key === 'country' ||
-        key === 'hashed_maids' ||
-        key === 'external_id'
-      ) {
-        let hashedValue = hashData(key, mappedData.user_data[key]);
-        const type = getType(hashedValue);
+  const userData = mappedData.user_data;
+  if (!userData) return mappedData;
 
-        if (type !== 'undefined' && hashedValue !== 'undefined') {
-          if (type !== 'object' && type !== 'array') {
-            hashedValue = [hashedValue];
-          }
+  // Normalization rules from the Pinterest API user_data schema.
+  const fieldsToNormalize = {
+    em: normalizeLowercase,
+    ph: normalizePhone,
+    ge: normalizeGender,
+    db: normalizeDateOfBirth,
+    fn: normalizeLowercase,
+    ln: normalizeLowercase,
+    ct: normalizeCityOrState,
+    st: normalizeCityOrState,
+    zp: normalizeZip,
+    country: normalizeLowercase,
+    hashed_maids: normalizeLowercase,
+    external_id: normalizeLowercase
+  };
 
-          mappedData.user_data[key] = hashedValue;
-        }
-      }
-    }
-  }
+  Object.keys(fieldsToNormalize).forEach((key) => {
+    if (!userData.hasOwnProperty(key)) return;
+
+    const hashedValue = hashData(userData[key], fieldsToNormalize[key]);
+    const type = getType(hashedValue);
+
+    if (!hashedValue) userData[key] = undefined;
+    else if (type === 'array' || type === 'object') userData[key] = hashedValue;
+    else userData[key] = [hashedValue];
+  });
 
   return mappedData;
+}
+
+function removeMatches(value, regex) {
+  if (!regex || getType(value) !== 'string') return undefined;
+  return value.replace(regex, '');
+}
+
+function removeWhitespace(value) {
+  return removeMatches(value, WHITESPACE_REGEX);
+}
+
+function removePunctuation(value) {
+  return removeMatches(value, PUNCTUATION_REGEX);
+}
+
+function onlyDigits(value) {
+  return removeMatches(value, NON_DIGITS_REGEX);
+}
+
+function normalizeLowercase(value) {
+  return value.trim().toLowerCase();
+}
+
+function normalizePhone(value) {
+  let phone = onlyDigits(value);
+  if (!phone) return phone;
+  while (phone.length && phone.charAt(0) === '0') phone = phone.substring(1);
+  return phone;
+}
+
+function normalizeGender(value) {
+  const gender = normalizeLowercase(value);
+  if (gender === 'female' || gender === 'woman') return 'f';
+  if (gender === 'male' || gender === 'man') return 'm';
+  if (
+    gender === 'non-binary' ||
+    gender === 'nonbinary' ||
+    gender === 'non_binary' ||
+    gender === 'non binary'
+  ) {
+    return 'n';
+  }
+  return gender;
+}
+
+function normalizeDateOfBirth(value) {
+  // Year, month and day, e.g. 1990-01-15 becomes 19900115.
+  return onlyDigits(value);
+}
+
+function normalizeCityOrState(value) {
+  return removeWhitespace(removePunctuation(normalizeLowercase(value)));
+}
+
+function normalizeZip(value) {
+  const zip = removeMatches(normalizeLowercase(value), ZIP_SEPARATORS_REGEX);
+  if (!zip) return zip;
+  // US ZIP+4 (e.g. 98101-1234): keep only the first 5 digits.
+  if (zip.length === 9 && onlyDigits(zip) === zip) return zip.substring(0, 5);
+  return zip;
 }
 
 function overrideDataIfNeeded(data, mappedData) {
@@ -338,10 +396,9 @@ function addUserData(eventData, mappedData) {
       }
     }
 
-    if (mappedData.action_source === 'web') {
-      if (eventData.ip_override) mappedData.user_data.client_ip_address = eventData.ip_override;
-      if (eventData.user_agent) mappedData.user_data.client_user_agent = eventData.user_agent;
-    }
+    // Pinterest recommends IP address and user agent for all action sources.
+    if (eventData.ip_override) mappedData.user_data.client_ip_address = eventData.ip_override;
+    if (eventData.user_agent) mappedData.user_data.client_user_agent = eventData.user_agent;
 
     const externalId = eventData.external_id || eventData.user_id || eventData.userId;
     if (externalId) mappedData.user_data.external_id = externalId;
@@ -418,9 +475,7 @@ function addServerEventData(eventData, mappedData) {
     : true;
 
   if (autoMapEnabled) {
-    if (mappedData.action_source === 'web') {
-      if (eventData.page_location) mappedData.event_source_url = eventData.page_location;
-    }
+    if (eventData.page_location) mappedData.event_source_url = eventData.page_location;
 
     mappedData.event_time = Math.round(getTimestampMillis() / 1000);
 
@@ -437,18 +492,21 @@ function parseClickIdFromUrl(eventData) {
   return searchParams.epik;
 }
 
-function setClickIdCookieIfNeeded(eventData) {
+function setClickIdCookieIfNeeded(data, eventData) {
+  if (data.notSetClickIdCookie) return;
+
   const clickId = parseClickIdFromUrl(eventData);
-  if (clickId) {
-    setCookie('_epik', clickId, {
-      domain: 'auto',
-      path: '/',
-      samesite: 'Lax',
-      secure: true,
-      httpOnly: false,
-      'max-age': 31536000 // 1 year
-    });
-  }
+  if (!clickId) return;
+
+  const expirationInDays = makeInteger(data.cookieExpiration) || 365;
+  setCookie('_epik', clickId, {
+    domain: getCookieDomain(data.cookieDomain, eventData),
+    path: '/',
+    samesite: data.cookieSameSite || 'Lax',
+    secure: true,
+    httpOnly: isUIFieldTrue(data.useHttpOnlyCookie),
+    'max-age': 60 * 60 * 24 * expirationInDays
+  });
 }
 
 function fixValueTypes(mappedData) {
@@ -507,6 +565,12 @@ function getUrl(eventData) {
   return eventData.page_location || eventData.page_referrer || getRequestHeader('referer');
 }
 
+function getCookieDomain(cookieDomain, eventData) {
+  return !cookieDomain || cookieDomain === 'auto'
+    ? computeEffectiveTldPlusOne(eventData.page_location || getRequestHeader('referer')) || 'auto'
+    : cookieDomain;
+}
+
 function isUIFieldTrue(field) {
   return [true, 'true'].indexOf(field) !== -1;
 }
@@ -521,4 +585,10 @@ function isConsentGivenOrNotRequired(data, eventData) {
   if (eventData.consent_state) return !!eventData.consent_state.ad_storage;
   const xGaGcs = eventData['x-ga-gcs'] || ''; // x-ga-gcs is a string like "G110"
   return xGaGcs[2] === '1';
+}
+
+function isValidValue(value) {
+  const valueType = getType(value);
+  if (valueType === 'null' || valueType === 'undefined' || value !== value) return false;
+  return value !== '' && value !== 'undefined' && value !== 'null';
 }
