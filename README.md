@@ -27,16 +27,26 @@ You can configure how events are sent in three ways:
 
 - **Pinterest Advertiser ID**: Your Advertiser ID starting with `549`. You can find it in [Pinterest Ads](https://ads.pinterest.com) under the navigation dropdown or in the browser URL.
 - **API Access Token**: Required to authenticate with the Pinterest Conversion API. You can obtain it in [Pinterest Ads](https://ads.pinterest.com) under _Conversions > Conversions API > Set up API_.
-- **Action Source**: Defines where the event originated. Options: `Web`, `Offline`, `App iOS`, `App Android`. Defaults to `Web`.
+- **Action Source**: Defines where the event originated. Select `Web`, `Offline`, `App iOS` or `App Android`, or use a variable that resolves to `web`, `offline`, `app_ios` or `app_android` (case-insensitive). Defaults to `web` when empty. The Event Source URL, IP address and user agent are auto-mapped for every action source.
 - **Test Mode**: When enabled, events are not recorded but the API returns the same response messages. Use this to verify your setup.
 - **Use Optimistic Scenario**: The tag will call `gtmOnSuccess()` immediately without waiting for a response from the API. This speeds up sGTM response time, but the tag will always report success even if the request fails.
+
+### Cookie Settings
+
+When the `epik` URL parameter is present, the tag stores the Click ID in the `_epik` cookie.
+
+- **Do not set Click ID (_epik) cookie**: The Click ID is still sent in the request, but it is not stored as a cookie.
+- **Cookie Domain**: Defaults to `auto`, which uses the top-level domain of `page_location` or of the `Referer` header. Enter a fixed domain (e.g., `example.com`) to override it.
+- **Cookie SameSite**: `None`, `Lax` (default) or `Strict`.
+- **Use HttpOnly cookies**: Forbids JavaScript from accessing the cookie when `true`. Accepts variables.
+- **Click ID Cookie Expiration**: Cookie lifetime in days. Defaults to `365`.
 
 ### Server Event Data Override
 
 Override or set server-side event parameters. Available properties:
 
 - Event Time
-- Source URL
+- Event Source URL
 - Opt Out
 - Event ID
 - App id / App name / App version
@@ -47,7 +57,18 @@ Override or set server-side event parameters. Available properties:
 
 ### User Data
 
-Override or set user data parameters sent with the event. If a parameter requires hashing (per Pinterest documentation), the tag will automatically SHA-256 hash it before sending.
+Override or set user data parameters sent with the event. If a parameter requires hashing (per Pinterest documentation), the tag normalizes and SHA-256 hashes it before sending, unless it is already hashed:
+
+- Email, first name, last name, country, external ID and MAIDs: trimmed and lowercased.
+- Phone: digits only, without leading zeros (include the country code).
+- Gender: `f`, `m` or `n` (`female`, `male` and `non-binary` are converted).
+- Date of birth: digits only (e.g., `1990-01-15` becomes `19900115`).
+- City and state: lowercased, without spaces or punctuation (send the state as a two-letter code).
+- Zip: lowercased, without spaces or dashes; a US ZIP+4 is cut to 5 digits.
+
+Values that are empty after normalization are not sent.
+
+Available properties:
 
 - Email
 - Phone
@@ -60,6 +81,7 @@ Override or set user data parameters sent with the event. If a parameter require
 - Client User Agent
 - External ID
 - Click ID
+- Customer Type
 
 ### Custom Data
 

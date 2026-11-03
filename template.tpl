@@ -203,7 +203,9 @@ ___TEMPLATE_PARAMETERS___
           }
         ],
         "simpleValueType": true,
-        "defaultValue": "web"
+        "defaultValue": "web",
+        "macrosInSelect": true,
+        "help": "The source where the conversion event occurred. Select one of the options or use a variable that resolves to one of these values:\n\u003cul\u003e\n\u003cli\u003e\u003ci\u003eweb\u003c/i\u003e: the event happened on a website.\u003c/li\u003e\n\u003cli\u003e\u003ci\u003eapp_android\u003c/i\u003e: the event happened in an Android app.\u003c/li\u003e\n\u003cli\u003e\u003ci\u003eapp_ios\u003c/i\u003e: the event happened in an iOS app.\u003c/li\u003e\n\u003cli\u003e\u003ci\u003eoffline\u003c/i\u003e: the event happened offline (e.g. in a physical store or over the phone).\u003c/li\u003e\n\u003c/ul\u003e\nThe value is case-insensitive and surrounding spaces are removed. If it resolves to an empty value, \u003ci\u003eweb\u003c/i\u003e is used.\n\u003cbr/\u003e\u003cbr/\u003e\nThe Event Source URL, IP address and user agent are auto-mapped for every Action Source."
       },
       {
         "type": "TEXT",
@@ -265,6 +267,110 @@ ___TEMPLATE_PARAMETERS___
     ]
   },
   {
+    "type": "GROUP",
+    "name": "cookieSettingsGroup",
+    "displayName": "Cookie Settings",
+    "groupStyle": "ZIPPY_CLOSED",
+    "subParams": [
+      {
+        "type": "CHECKBOX",
+        "name": "notSetClickIdCookie",
+        "checkboxText": "Do not set Click ID (_epik) cookie",
+        "simpleValueType": true,
+        "help": "If checked, the Click ID found in the \u003ci\u003eepik\u003c/i\u003e URL parameter will still be sent in the request, but it will not be stored as the \u003ci\u003e_epik\u003c/i\u003e cookie.",
+        "defaultValue": false
+      },
+      {
+        "type": "GROUP",
+        "name": "clickIdCookieSettingsGroup",
+        "displayName": "",
+        "groupStyle": "NO_ZIPPY",
+        "subParams": [
+          {
+            "type": "TEXT",
+            "name": "cookieDomain",
+            "displayName": "Cookie Domain",
+            "simpleValueType": true,
+            "valueHint": "example.com",
+            "help": "Use this option to override the cookie domain. \n\u003cbr\u003e \nEnter your website\u0027s top-level domain as a fixed value (e.g., example.com). \n\u003cbr\u003e\n If left empty or using the \"auto\" value, the domain will be automatically determined using the following priority: \u003cul\u003e \n\u003cli\u003eDomain of the \u003ci\u003epage_location\u003c/i\u003e Event Data parameter (if present).\u003c/li\u003e\n\u003cli\u003eDomain of the \u003ci\u003eReferer\u003c/i\u003e header (if present).\u003c/li\u003e\n\u003cli\u003eDomain of the \u003ci\u003eForwarded\u003c/i\u003e header (if present).\u003c/li\u003e\n\u003cli\u003eDomain of the \u003ci\u003eX-Forwarded-Host\u003c/i\u003e header (if present).\u003c/li\u003e\n\u003cli\u003eDomain of the \u003ci\u003eHost\u003c/i\u003e header.\u003c/li\u003e\n\u003c/ul\u003e",
+            "defaultValue": "auto",
+            "valueValidators": [
+              {
+                "type": "NON_EMPTY"
+              }
+            ]
+          },
+          {
+            "type": "SELECT",
+            "name": "cookieSameSite",
+            "displayName": "Cookie SameSite",
+            "macrosInSelect": false,
+            "selectItems": [
+              {
+                "value": "none",
+                "displayValue": "None"
+              },
+              {
+                "value": "lax",
+                "displayValue": "Lax"
+              },
+              {
+                "value": "strict",
+                "displayValue": "Strict"
+              }
+            ],
+            "simpleValueType": true,
+            "help": "\u003ca href\u003d\"https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Set-Cookie#samesitesamesite-value\"\u003eLearn more\u003c/a\u003e.",
+            "defaultValue": "lax"
+          },
+          {
+            "type": "SELECT",
+            "name": "useHttpOnlyCookie",
+            "displayName": "Use HttpOnly cookies",
+            "macrosInSelect": true,
+            "selectItems": [
+              {
+                "value": false,
+                "displayValue": "false"
+              },
+              {
+                "value": true,
+                "displayValue": "true"
+              }
+            ],
+            "simpleValueType": true,
+            "notSetText": "(not set)",
+            "help": "Forbids JavaScript from accessing the cookie if \u003ci\u003etrue\u003c/i\u003e."
+          },
+          {
+            "type": "TEXT",
+            "name": "cookieExpiration",
+            "displayName": "Click ID Cookie Expiration",
+            "simpleValueType": true,
+            "valueUnit": "days",
+            "defaultValue": 365,
+            "help": "How long the \u003ci\u003e_epik\u003c/i\u003e cookie is kept, in days. Defaults to 365 days.",
+            "valueValidators": [
+              {
+                "type": "NON_EMPTY"
+              },
+              {
+                "type": "POSITIVE_NUMBER"
+              }
+            ]
+          }
+        ],
+        "enablingConditions": [
+          {
+            "paramName": "notSetClickIdCookie",
+            "paramValue": true,
+            "type": "NOT_EQUALS"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "displayName": "Server Event Data Override",
     "name": "serverEventDataListGroup",
     "groupStyle": "ZIPPY_CLOSED",
@@ -275,7 +381,7 @@ ___TEMPLATE_PARAMETERS___
         "name": "autoMapServerEventDataParameters",
         "checkboxText": "Automap Server Event Data Parameters",
         "simpleValueType": true,
-        "help": "If enabled, the tag will attempt to automatically map parameters from the Event Data.\n\u003cbr/\u003e\u003cbr/\u003e\nAny value you manually enter in a field below will always override the auto-mapped value.\n\u003cbr/\u003e\u003cbr/\u003e\nDefault mappings:\n\u003cul\u003e\n\u003cli\u003eEvent Timestamp: Unix timestamp in seconds of when the server tag fired\u003c/li\u003e\n\u003cli\u003eSource URL: \u003ci\u003eeventData.page_location\u003c/i\u003e (only when Action Source is Web)\u003c/li\u003e\n\u003cli\u003eEvent ID:\n\u003cul\u003e\n\u003cli\u003e\u003ci\u003eeventData.event_id\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003ci\u003eeventData.transaction_id\u003c/i\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e",
+        "help": "If enabled, the tag will attempt to automatically map parameters from the Event Data.\n\u003cbr/\u003e\u003cbr/\u003e\nAny value you manually enter in a field below will always override the auto-mapped value.\n\u003cbr/\u003e\u003cbr/\u003e\nDefault mappings:\n\u003cul\u003e\n\u003cli\u003eEvent Timestamp: Unix timestamp in seconds of when the server tag fired\u003c/li\u003e\n\u003cli\u003eEvent Source URL: \u003ci\u003eeventData.page_location\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003eEvent ID:\n\u003cul\u003e\n\u003cli\u003e\u003ci\u003eeventData.event_id\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003ci\u003eeventData.transaction_id\u003c/i\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e",
         "defaultValue": true
       },
       {
@@ -299,7 +405,7 @@ ___TEMPLATE_PARAMETERS___
               },
               {
                 "value": "event_source_url",
-                "displayValue": "Source URL"
+                "displayValue": "Event Source URL"
               },
               {
                 "value": "opt_out",
@@ -362,7 +468,7 @@ ___TEMPLATE_PARAMETERS___
         "newRowButtonText": "Add property"
       }
     ],
-    "help": "See \u003ca href\u003d\"https://s.pinimg.com/ct/docs/conversions_api/dist/v3.html\" target\u003d\"_blank\"\u003ethis documentation\u003c/a\u003e for more details on what data parameters you can override."
+    "help": "See \u003ca href\u003d\"https://developers.pinterest.com/docs/api/v5/events-create\" target\u003d\"_blank\"\u003ethis documentation\u003c/a\u003e for more details on what data parameters you can override."
   },
   {
     "displayName": "User Data",
@@ -375,7 +481,7 @@ ___TEMPLATE_PARAMETERS___
         "name": "autoMapUserDataParameters",
         "checkboxText": "Automap User Data Parameters",
         "simpleValueType": true,
-        "help": "If enabled, the tag will attempt to automatically map parameters from the Event Data.\n\u003cbr/\u003e\u003cbr/\u003e\nAny value you manually enter in a field below will always override the auto-mapped value.\n\u003cbr/\u003e\u003cbr/\u003e\nDefault mappings:\n\u003cul\u003e\n\u003cli\u003e\u003cb\u003eEmail:\u003c/b\u003e \u003ci\u003eeventData.email\u003c/i\u003e, \u003ci\u003eeventData.user_data.email_address\u003c/i\u003e, \u003ci\u003eeventData.user_data.email\u003c/i\u003e, \u003ci\u003eeventData.user_data.sha256_email_address\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003ePhone:\u003c/b\u003e \u003ci\u003eeventData.phone\u003c/i\u003e, \u003ci\u003eeventData.user_data.phone_number\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eFirst Name:\u003c/b\u003e \u003ci\u003eeventData.firstName\u003c/i\u003e, \u003ci\u003eeventData.FirstName\u003c/i\u003e, \u003ci\u003eeventData.nameFirst\u003c/i\u003e, \u003ci\u003eeventData.first_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.first_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.first_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.sha256_first_name\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eLast Name:\u003c/b\u003e \u003ci\u003eeventData.lastName\u003c/i\u003e, \u003ci\u003eeventData.LastName\u003c/i\u003e, \u003ci\u003eeventData.nameLast\u003c/i\u003e, \u003ci\u003eeventData.last_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.last_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.last_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.sha256_last_name\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eCity:\u003c/b\u003e \u003ci\u003eeventData.city\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.city\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eState:\u003c/b\u003e \u003ci\u003eeventData.state\u003c/i\u003e, \u003ci\u003eeventData.region\u003c/i\u003e, \u003ci\u003eeventData.user_data.region\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.region\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eZIP Code:\u003c/b\u003e \u003ci\u003eeventData.zip\u003c/i\u003e, \u003ci\u003eeventData.postal_code\u003c/i\u003e, \u003ci\u003eeventData.user_data.postal_code\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.postal_code\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eCountry:\u003c/b\u003e \u003ci\u003eeventData.countryCode\u003c/i\u003e, \u003ci\u003eeventData.country\u003c/i\u003e, \u003ci\u003eeventData.user_data.country\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.country\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eGender:\u003c/b\u003e \u003ci\u003eeventData.gender\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eDate of Birth:\u003c/b\u003e \u003ci\u003eeventData.db\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eMobile Advertising ID:\u003c/b\u003e \u003ci\u003eeventData.hashed_maids\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eExternal ID:\u003c/b\u003e \u003ci\u003eeventData.external_id\u003c/i\u003e, \u003ci\u003eeventData.user_id\u003c/i\u003e, \u003ci\u003eeventData.userId\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eIP Address:\u003c/b\u003e \u003ci\u003eeventData.ip_override\u003c/i\u003e (only when Action Source is Web)\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eUser Agent:\u003c/b\u003e \u003ci\u003eeventData.user_agent\u003c/i\u003e (only when Action Source is Web)\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eClick ID:\u003c/b\u003e \u003ci\u003eepik URL parameter\u003c/i\u003e, \u003ci\u003e_epik cookie\u003c/i\u003e, \u003ci\u003eeventData.common_cookie._epik\u003c/i\u003e, \u003ci\u003eeventData._epik\u003c/i\u003e, \u003ci\u003eeventData.epik\u003c/i\u003e, \u003ci\u003eeventData.click_id\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eCustomer Type:\u003c/b\u003e \u003ci\u003eeventData.customer_type\u003c/i\u003e\u003c/li\u003e\n\u003c/ul\u003e",
+        "help": "If enabled, the tag will attempt to automatically map parameters from the Event Data.\n\u003cbr/\u003e\u003cbr/\u003e\nAny value you manually enter in a field below will always override the auto-mapped value.\n\u003cbr/\u003e\u003cbr/\u003e\nDefault mappings:\n\u003cul\u003e\n\u003cli\u003e\u003cb\u003eEmail:\u003c/b\u003e \u003ci\u003eeventData.email\u003c/i\u003e, \u003ci\u003eeventData.user_data.email_address\u003c/i\u003e, \u003ci\u003eeventData.user_data.email\u003c/i\u003e, \u003ci\u003eeventData.user_data.sha256_email_address\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003ePhone:\u003c/b\u003e \u003ci\u003eeventData.phone\u003c/i\u003e, \u003ci\u003eeventData.user_data.phone_number\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eFirst Name:\u003c/b\u003e \u003ci\u003eeventData.firstName\u003c/i\u003e, \u003ci\u003eeventData.FirstName\u003c/i\u003e, \u003ci\u003eeventData.nameFirst\u003c/i\u003e, \u003ci\u003eeventData.first_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.first_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.first_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.sha256_first_name\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eLast Name:\u003c/b\u003e \u003ci\u003eeventData.lastName\u003c/i\u003e, \u003ci\u003eeventData.LastName\u003c/i\u003e, \u003ci\u003eeventData.nameLast\u003c/i\u003e, \u003ci\u003eeventData.last_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.last_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.last_name\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.sha256_last_name\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eCity:\u003c/b\u003e \u003ci\u003eeventData.city\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.city\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eState:\u003c/b\u003e \u003ci\u003eeventData.state\u003c/i\u003e, \u003ci\u003eeventData.region\u003c/i\u003e, \u003ci\u003eeventData.user_data.region\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.region\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eZIP Code:\u003c/b\u003e \u003ci\u003eeventData.zip\u003c/i\u003e, \u003ci\u003eeventData.postal_code\u003c/i\u003e, \u003ci\u003eeventData.user_data.postal_code\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.postal_code\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eCountry:\u003c/b\u003e \u003ci\u003eeventData.countryCode\u003c/i\u003e, \u003ci\u003eeventData.country\u003c/i\u003e, \u003ci\u003eeventData.user_data.country\u003c/i\u003e, \u003ci\u003eeventData.user_data.address.country\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eGender:\u003c/b\u003e \u003ci\u003eeventData.gender\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eDate of Birth:\u003c/b\u003e \u003ci\u003eeventData.db\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eMobile Advertising ID:\u003c/b\u003e \u003ci\u003eeventData.hashed_maids\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eExternal ID:\u003c/b\u003e \u003ci\u003eeventData.external_id\u003c/i\u003e, \u003ci\u003eeventData.user_id\u003c/i\u003e, \u003ci\u003eeventData.userId\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eIP Address:\u003c/b\u003e \u003ci\u003eeventData.ip_override\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eUser Agent:\u003c/b\u003e \u003ci\u003eeventData.user_agent\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eClick ID:\u003c/b\u003e \u003ci\u003eepik URL parameter\u003c/i\u003e, \u003ci\u003e_epik cookie\u003c/i\u003e, \u003ci\u003eeventData.common_cookie._epik\u003c/i\u003e, \u003ci\u003eeventData._epik\u003c/i\u003e, \u003ci\u003eeventData.epik\u003c/i\u003e, \u003ci\u003eeventData.click_id\u003c/i\u003e\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eCustomer Type:\u003c/b\u003e \u003ci\u003eeventData.customer_type\u003c/i\u003e\u003c/li\u003e\n\u003c/ul\u003e",
         "defaultValue": true
       },
       {
@@ -470,7 +576,7 @@ ___TEMPLATE_PARAMETERS___
         "newRowButtonText": "Add property"
       }
     ],
-    "help": "See \u003ca href\u003d\"https://s.pinimg.com/ct/docs/conversions_api/dist/v3.html\" target\u003d\"_blank\"\u003ethis documentation\u003c/a\u003e for more details on what user data parameters you can add to the call. If the documentation requires the parameter to be hashed, you \u003cstrong\u003emust\u003c/strong\u003e hash it with SHA256, or the tag will do this automatically before sending the event to Pinterest."
+    "help": "See \u003ca href\u003d\"https://developers.pinterest.com/docs/api/v5/events-create\" target\u003d\"_blank\"\u003ethis documentation\u003c/a\u003e for more details on what user data parameters you can add to the call. If the documentation requires the parameter to be hashed, you can send it already hashed with SHA256, or the tag will normalize and hash it automatically before sending the event to Pinterest.\n\u003cbr/\u003e\u003cbr/\u003e\nNormalization applied before hashing:\n\u003cul\u003e\n\u003cli\u003e\u003cb\u003eEmail, First Name, Last Name, Country, External ID and Mobile Advertising ID:\u003c/b\u003e trimmed and lowercased.\u003c/li\u003e\n\u003cli\u003e\u003cb\u003ePhone:\u003c/b\u003e digits only, without leading zeros. Include the country code (e.g. \u003ci\u003e+1 (555) 123-4567\u003c/i\u003e becomes \u003ci\u003e15551234567\u003c/i\u003e).\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eGender:\u003c/b\u003e lowercased; \u003ci\u003efemale\u003c/i\u003e becomes \u003ci\u003ef\u003c/i\u003e, \u003ci\u003emale\u003c/i\u003e becomes \u003ci\u003em\u003c/i\u003e and \u003ci\u003enon-binary\u003c/i\u003e becomes \u003ci\u003en\u003c/i\u003e.\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eDate of Birth:\u003c/b\u003e digits only. Send it as year, month and day (e.g. \u003ci\u003e1990-01-15\u003c/i\u003e becomes \u003ci\u003e19900115\u003c/i\u003e).\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eCity and State:\u003c/b\u003e lowercased, without spaces or punctuation (e.g. \u003ci\u003eLas Vegas\u003c/i\u003e becomes \u003ci\u003elasvegas\u003c/i\u003e). Send the State as a two-letter code.\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eZip:\u003c/b\u003e lowercased, without spaces or dashes; a US ZIP+4 is cut to 5 digits (e.g. \u003ci\u003e98101-1234\u003c/i\u003e becomes \u003ci\u003e98101\u003c/i\u003e).\u003c/li\u003e\n\u003c/ul\u003e\nValues that are empty after normalization are not sent. Values that already look like a SHA256 hash are sent as they are. Client IP address, Client user agent, Click ID and Customer Type are never hashed."
   },
   {
     "displayName": "Custom Data",
@@ -570,7 +676,7 @@ ___TEMPLATE_PARAMETERS___
         "newRowButtonText": "Add property"
       }
     ],
-    "help": "See \u003ca href\u003d\"https://s.pinimg.com/ct/docs/conversions_api/dist/v3.html\" target\u003d\"_blank\"\u003ethis documentation\u003c/a\u003e for more details on what data parameters you can add to the call."
+    "help": "See \u003ca href\u003d\"https://developers.pinterest.com/docs/api/v5/events-create\" target\u003d\"_blank\"\u003ethis documentation\u003c/a\u003e for more details on what data parameters you can add to the call."
   },
   {
     "type": "GROUP",
@@ -603,17 +709,19 @@ ___TEMPLATE_PARAMETERS___
 
 ___SANDBOXED_JS_FOR_SERVER___
 
-const JSON = require('JSON');
-const Math = require('Math');
-const Object = require('Object');
+const computeEffectiveTldPlusOne = require('computeEffectiveTldPlusOne');
+const createRegex = require('createRegex');
 const encodeUri = require('encodeUri');
 const getAllEventData = require('getAllEventData');
 const getCookieValues = require('getCookieValues');
 const getRequestHeader = require('getRequestHeader');
 const getTimestampMillis = require('getTimestampMillis');
 const getType = require('getType');
+const JSON = require('JSON');
 const makeInteger = require('makeInteger');
 const makeString = require('makeString');
+const Math = require('Math');
+const Object = require('Object');
 const parseUrl = require('parseUrl');
 const sendHttpRequest = require('sendHttpRequest');
 const setCookie = require('setCookie');
@@ -628,7 +736,12 @@ if (shouldExitEarly(data, eventData)) {
   return data.gtmOnSuccess();
 }
 
-setClickIdCookieIfNeeded(eventData);
+const WHITESPACE_REGEX = createRegex('[\\s\\p{Z}]', 'g');
+const PUNCTUATION_REGEX = createRegex('[\\p{P}\\p{S}]', 'g');
+const NON_DIGITS_REGEX = createRegex('[^0-9]', 'g');
+const ZIP_SEPARATORS_REGEX = createRegex('[\\s\\p{Z}\\p{Pd}]', 'g');
+
+setClickIdCookieIfNeeded(data, eventData);
 
 const mappedEventData = mapEvent(eventData, data);
 
@@ -712,7 +825,7 @@ function mapEvent(eventData, data) {
 
   let mappedData = {
     event_name: eventName,
-    action_source: data.actionSource || 'web',
+    action_source: getActionSource(data),
     partner_name: 'ss-stape',
     custom_data: {
       np: 'ss-stape'
@@ -725,13 +838,18 @@ function mapEvent(eventData, data) {
   mappedData = addEcommerceData(eventData, mappedData);
   mappedData = overrideDataIfNeeded(data, mappedData);
   mappedData = fixValueTypes(mappedData);
-  mappedData = cleanupData(mappedData);
   mappedData = hashDataIfNeeded(mappedData);
+  mappedData = cleanupData(mappedData);
 
   return mappedData;
 }
 
-function hashData(key, value) {
+function getActionSource(data) {
+  if (!isValidValue(data.actionSource)) return 'web';
+  return makeString(data.actionSource).trim().toLowerCase() || 'web';
+}
+
+function hashData(value, normalize) {
   if (!value) return value;
 
   const type = getType(value);
@@ -739,71 +857,117 @@ function hashData(key, value) {
   if (value === 'undefined' || value === 'null') return undefined;
 
   if (type === 'array') {
-    return value.map((val) => hashData(key, val));
+    const hashedValues = value.map((val) => hashData(val, normalize)).filter((val) => !!val);
+    return hashedValues.length ? hashedValues : undefined;
   }
 
   if (type === 'object') {
     return Object.keys(value).reduce((acc, val) => {
-      acc[val] = hashData(val, value[val]);
+      acc[val] = hashData(value[val], normalize);
       return acc;
     }, {});
   }
 
   if (isHashed(value)) return value;
 
-  value = makeString(value).trim().toLowerCase();
+  const normalizedValue = normalize(makeString(value));
+  if (!normalizedValue) return undefined;
 
-  if (key === 'ph') {
-    value = value
-      .split(' ')
-      .join('')
-      .split('-')
-      .join('')
-      .split('(')
-      .join('')
-      .split(')')
-      .join('')
-      .split('+')
-      .join('');
-  } else if (key === 'ct') {
-    value = value.split(' ').join('');
-  }
-
-  return sha256Sync(value, { outputEncoding: 'hex' });
+  return sha256Sync(normalizedValue, { outputEncoding: 'hex' });
 }
 
 function hashDataIfNeeded(mappedData) {
-  if (mappedData.user_data) {
-    for (let key in mappedData.user_data) {
-      if (
-        key === 'em' ||
-        key === 'ph' ||
-        key === 'ge' ||
-        key === 'db' ||
-        key === 'ln' ||
-        key === 'fn' ||
-        key === 'ct' ||
-        key === 'st' ||
-        key === 'zp' ||
-        key === 'country' ||
-        key === 'hashed_maids' ||
-        key === 'external_id'
-      ) {
-        let hashedValue = hashData(key, mappedData.user_data[key]);
-        const type = getType(hashedValue);
+  const userData = mappedData.user_data;
+  if (!userData) return mappedData;
 
-        if (type !== 'undefined' && hashedValue !== 'undefined') {
-          if (type !== 'object' && type !== 'array') {
-            hashedValue = [hashedValue];
-          }
+  // Normalization rules from the Pinterest API user_data schema.
+  const fieldsToNormalize = {
+    em: normalizeLowercase,
+    ph: normalizePhone,
+    ge: normalizeGender,
+    db: normalizeDateOfBirth,
+    fn: normalizeLowercase,
+    ln: normalizeLowercase,
+    ct: normalizeCityOrState,
+    st: normalizeCityOrState,
+    zp: normalizeZip,
+    country: normalizeLowercase,
+    hashed_maids: normalizeLowercase,
+    external_id: normalizeLowercase
+  };
 
-          mappedData.user_data[key] = hashedValue;
-        }
-      }
-    }
-  }
+  Object.keys(fieldsToNormalize).forEach((key) => {
+    if (!userData.hasOwnProperty(key)) return;
+
+    const hashedValue = hashData(userData[key], fieldsToNormalize[key]);
+    const type = getType(hashedValue);
+
+    if (!hashedValue) userData[key] = undefined;
+    else if (type === 'array' || type === 'object') userData[key] = hashedValue;
+    else userData[key] = [hashedValue];
+  });
 
   return mappedData;
+}
+
+function removeMatches(value, regex) {
+  if (!regex || getType(value) !== 'string') return undefined;
+  return value.replace(regex, '');
+}
+
+function removeWhitespace(value) {
+  return removeMatches(value, WHITESPACE_REGEX);
+}
+
+function removePunctuation(value) {
+  return removeMatches(value, PUNCTUATION_REGEX);
+}
+
+function onlyDigits(value) {
+  return removeMatches(value, NON_DIGITS_REGEX);
+}
+
+function normalizeLowercase(value) {
+  return value.trim().toLowerCase();
+}
+
+function normalizePhone(value) {
+  let phone = onlyDigits(value);
+  if (!phone) return phone;
+  while (phone.length && phone.charAt(0) === '0') phone = phone.substring(1);
+  return phone;
+}
+
+function normalizeGender(value) {
+  const gender = normalizeLowercase(value);
+  if (gender === 'female' || gender === 'woman') return 'f';
+  if (gender === 'male' || gender === 'man') return 'm';
+  if (
+    gender === 'non-binary' ||
+    gender === 'nonbinary' ||
+    gender === 'non_binary' ||
+    gender === 'non binary'
+  ) {
+    return 'n';
+  }
+  return gender;
+}
+
+function normalizeDateOfBirth(value) {
+  // Year, month and day, e.g. 1990-01-15 becomes 19900115.
+  return onlyDigits(value);
+}
+
+function normalizeCityOrState(value) {
+  return removeWhitespace(removePunctuation(normalizeLowercase(value)));
+}
+
+function normalizeZip(value) {
+  const zip = removeMatches(normalizeLowercase(value), ZIP_SEPARATORS_REGEX);
+  if (!zip) return zip;
+  // US ZIP+4 (e.g. 98101-1234): keep only the first 5 digits.
+  if (zip.length === 9 && onlyDigits(zip) === zip) return zip.substring(0, 5);
+  return zip;
 }
 
 function overrideDataIfNeeded(data, mappedData) {
@@ -943,10 +1107,9 @@ function addUserData(eventData, mappedData) {
       }
     }
 
-    if (mappedData.action_source === 'web') {
-      if (eventData.ip_override) mappedData.user_data.client_ip_address = eventData.ip_override;
-      if (eventData.user_agent) mappedData.user_data.client_user_agent = eventData.user_agent;
-    }
+    // Pinterest recommends IP address and user agent for all action sources.
+    if (eventData.ip_override) mappedData.user_data.client_ip_address = eventData.ip_override;
+    if (eventData.user_agent) mappedData.user_data.client_user_agent = eventData.user_agent;
 
     const externalId = eventData.external_id || eventData.user_id || eventData.userId;
     if (externalId) mappedData.user_data.external_id = externalId;
@@ -1023,9 +1186,7 @@ function addServerEventData(eventData, mappedData) {
     : true;
 
   if (autoMapEnabled) {
-    if (mappedData.action_source === 'web') {
-      if (eventData.page_location) mappedData.event_source_url = eventData.page_location;
-    }
+    if (eventData.page_location) mappedData.event_source_url = eventData.page_location;
 
     mappedData.event_time = Math.round(getTimestampMillis() / 1000);
 
@@ -1042,18 +1203,21 @@ function parseClickIdFromUrl(eventData) {
   return searchParams.epik;
 }
 
-function setClickIdCookieIfNeeded(eventData) {
+function setClickIdCookieIfNeeded(data, eventData) {
+  if (data.notSetClickIdCookie) return;
+
   const clickId = parseClickIdFromUrl(eventData);
-  if (clickId) {
-    setCookie('_epik', clickId, {
-      domain: 'auto',
-      path: '/',
-      samesite: 'Lax',
-      secure: true,
-      httpOnly: false,
-      'max-age': 31536000 // 1 year
-    });
-  }
+  if (!clickId) return;
+
+  const expirationInDays = makeInteger(data.cookieExpiration) || 365;
+  setCookie('_epik', clickId, {
+    domain: getCookieDomain(data.cookieDomain, eventData),
+    path: '/',
+    samesite: data.cookieSameSite || 'Lax',
+    secure: true,
+    httpOnly: isUIFieldTrue(data.useHttpOnlyCookie),
+    'max-age': 60 * 60 * 24 * expirationInDays
+  });
 }
 
 function fixValueTypes(mappedData) {
@@ -1112,6 +1276,12 @@ function getUrl(eventData) {
   return eventData.page_location || eventData.page_referrer || getRequestHeader('referer');
 }
 
+function getCookieDomain(cookieDomain, eventData) {
+  return !cookieDomain || cookieDomain === 'auto'
+    ? computeEffectiveTldPlusOne(eventData.page_location || getRequestHeader('referer')) || 'auto'
+    : cookieDomain;
+}
+
 function isUIFieldTrue(field) {
   return [true, 'true'].indexOf(field) !== -1;
 }
@@ -1126,6 +1296,12 @@ function isConsentGivenOrNotRequired(data, eventData) {
   if (eventData.consent_state) return !!eventData.consent_state.ad_storage;
   const xGaGcs = eventData['x-ga-gcs'] || ''; // x-ga-gcs is a string like "G110"
   return xGaGcs[2] === '1';
+}
+
+function isValidValue(value) {
+  const valueType = getType(value);
+  if (valueType === 'null' || valueType === 'undefined' || value !== value) return false;
+  return value !== '' && value !== 'undefined' && value !== 'null';
 }
 
 
@@ -1693,26 +1869,6 @@ scenarios:
     assertThat(sentUserData.ln).isEqualTo(['799ef92a11af918e3fb741df42934f3b568ed2d93ac1df74f1b8d41a27932a6f']);
     assertApi('gtmOnSuccess').wasCalled();
     assertApi('gtmOnFailure').wasNotCalled();
-- name: '[User Data] Ip address and user agent are only mapped for web action source'
-  code: |-
-    mockData.actionSource = 'offline';
-    mock('getAllEventData', () => assign(baseEventData(), {
-      ip_override: '203.0.113.5',
-      user_agent: 'TestAgent/1.0'
-    }));
-
-    let sentUserData;
-    mock('sendHttpRequest', (url, callback, options, body) => {
-      sentUserData = JSON.parse(body).data[0].user_data;
-      callback(200, {}, '');
-    });
-
-    runCode(mockData);
-
-    assertThat(sentUserData.client_ip_address).isUndefined();
-    assertThat(sentUserData.client_user_agent).isUndefined();
-    assertApi('gtmOnSuccess').wasCalled();
-    assertApi('gtmOnFailure').wasNotCalled();
 - name: '[User Data] Click id resolves from URL cookie or event data in priority order'
   code: |-
     [
@@ -1763,21 +1919,6 @@ scenarios:
     runCode(mockData);
 
     assertThat(sentUserData).isEqualTo({});
-    assertApi('gtmOnSuccess').wasCalled();
-    assertApi('gtmOnFailure').wasNotCalled();
-- name: '[Cookie] Sets epik cookie when epik query parameter is present in URL'
-  code: |-
-    mock('getAllEventData', () => assign(baseEventData(), { page_location: 'https://example.com/checkout?epik=abc123' }));
-
-    mock('setCookie', (name, value, options) => {
-      assertThat(name).isEqualTo('_epik');
-      assertThat(value).isEqualTo('abc123');
-      assertThat(options.domain).isEqualTo('auto');
-    });
-
-    runCode(mockData);
-
-    assertApi('setCookie').wasCalled();
     assertApi('gtmOnSuccess').wasCalled();
     assertApi('gtmOnFailure').wasNotCalled();
 - name: '[Ecommerce Data] Maps items contents value currency and content ids'
@@ -1976,9 +2117,10 @@ scenarios:
       });
 
       runCode(mockData);
-
-      assertApi('gtmOnSuccess').wasCalled();
     });
+
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
 - name: '[Value Types] Converts external measurement vendor id string to integer'
   code: |-
     mockData.customDataList = [{ name: 'external_measurement_vendor_id', value: '42' }];
@@ -2017,8 +2159,432 @@ scenarios:
       assertApi('gtmOnSuccess').wasCalled();
       assertApi('gtmOnFailure').wasNotCalled();
     });
+- name: '[Action Source] Uses the selected or variable value, normalized, and defaults
+    to web'
+  code: |-
+    [
+      { input: 'web', expected: 'web' },
+      { input: 'offline', expected: 'offline' },
+      { input: 'app_ios', expected: 'app_ios' },
+      { input: 'app_android', expected: 'app_android' },
+      { input: ' APP_IOS ', expected: 'app_ios' },
+      { input: undefined, expected: 'web' },
+      { input: '', expected: 'web' },
+      { input: '   ', expected: 'web' },
+      { input: 'undefined', expected: 'web' },
+      { input: 'null', expected: 'web' }
+    ].forEach(scenario => {
+      cleanup();
+      const copyMockData = createMockData();
+      copyMockData.actionSource = scenario.input;
+
+      let sentActionSource;
+      mock('sendHttpRequest', (url, callback, options, body) => {
+        sentActionSource = JSON.parse(body).data[0].action_source;
+        callback(200, {}, '');
+      });
+
+      runCode(copyMockData);
+
+      assertThat(sentActionSource).isEqualTo(scenario.expected);
+    });
+
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Action Source] Event source URL, IP address and user agent are mapped for
+    every action source'
+  code: |-
+    ['web', 'offline', 'app_ios', 'app_android'].forEach(actionSource => {
+      cleanup();
+      const copyMockData = createMockData();
+      copyMockData.actionSource = actionSource;
+      mock('getAllEventData', () => assign(baseEventData(), {
+        ip_override: '203.0.113.5',
+        user_agent: 'TestAgent/1.0'
+      }));
+
+      let sentData;
+      mock('sendHttpRequest', (url, callback, options, body) => {
+        sentData = JSON.parse(body).data[0];
+        callback(200, {}, '');
+      });
+
+      runCode(copyMockData);
+
+      assertThat(sentData.action_source).isEqualTo(actionSource);
+      assertThat(sentData.event_source_url).isEqualTo('https://example.com/checkout');
+      assertThat(sentData.user_data.client_ip_address).isEqualTo('203.0.113.5');
+      assertThat(sentData.user_data.client_user_agent).isEqualTo('TestAgent/1.0');
+    });
+
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Cookie] Sets epik cookie with default options and auto domain from page
+    location'
+  code: |-
+    let computedFrom;
+    mock('computeEffectiveTldPlusOne', (domainOrUrl) => {
+      computedFrom = domainOrUrl;
+      return 'example.com';
+    });
+    mock('getAllEventData', () => assign(baseEventData(), { page_location: 'https://shop.example.com/checkout?epik=abc123' }));
+
+    let cookieArgs;
+    mock('setCookie', (name, value, options) => {
+      cookieArgs = { name: name, value: value, options: options };
+    });
+
+    let sentClickId;
+    mock('sendHttpRequest', (url, callback, options, body) => {
+      sentClickId = JSON.parse(body).data[0].user_data.click_id;
+      callback(200, {}, '');
+    });
+
+    runCode(mockData);
+
+    assertThat(computedFrom).isEqualTo('https://shop.example.com/checkout?epik=abc123');
+    assertThat(cookieArgs).isEqualTo({
+      name: '_epik',
+      value: 'abc123',
+      options: {
+        domain: 'example.com',
+        path: '/',
+        samesite: 'lax',
+        secure: true,
+        httpOnly: false,
+        'max-age': 31536000
+      }
+    });
+    assertThat(sentClickId).isEqualTo('abc123');
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Cookie] Applies custom domain, SameSite, HttpOnly and expiration settings'
+  code: |-
+    [
+      { cookieDomain: 'custom.com', cookieSameSite: 'strict', useHttpOnlyCookie: true, cookieExpiration: '30', expectedDomain: 'custom.com', expectedSameSite: 'strict', expectedHttpOnly: true, expectedMaxAge: 2592000 },
+      { cookieDomain: 'custom.com', cookieSameSite: 'none', useHttpOnlyCookie: 'true', cookieExpiration: 7, expectedDomain: 'custom.com', expectedSameSite: 'none', expectedHttpOnly: true, expectedMaxAge: 604800 },
+      { cookieDomain: 'auto', cookieSameSite: 'lax', useHttpOnlyCookie: 'false', cookieExpiration: '365', expectedDomain: 'example.com', expectedSameSite: 'lax', expectedHttpOnly: false, expectedMaxAge: 31536000 }
+    ].forEach(scenario => {
+      cleanup();
+      const copyMockData = createMockData();
+      copyMockData.cookieDomain = scenario.cookieDomain;
+      copyMockData.cookieSameSite = scenario.cookieSameSite;
+      copyMockData.useHttpOnlyCookie = scenario.useHttpOnlyCookie;
+      copyMockData.cookieExpiration = scenario.cookieExpiration;
+      mock('getAllEventData', () => assign(baseEventData(), { page_location: 'https://example.com/checkout?epik=abc123' }));
+
+      let cookieOptions;
+      mock('setCookie', (name, value, options) => {
+        cookieOptions = options;
+      });
+
+      runCode(copyMockData);
+
+      assertThat(cookieOptions.domain).isEqualTo(scenario.expectedDomain);
+      assertThat(cookieOptions.samesite).isEqualTo(scenario.expectedSameSite);
+      assertThat(cookieOptions.httpOnly).isEqualTo(scenario.expectedHttpOnly);
+      assertThat(cookieOptions['max-age']).isEqualTo(scenario.expectedMaxAge);
+      assertThat(cookieOptions.secure).isTrue();
+      assertThat(cookieOptions.path).isEqualTo('/');
+    });
+
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Cookie] Saved tags without cookie settings use computed domain, Lax, no
+    HttpOnly and 1 year'
+  code: |-
+    const legacyMockData = createMockData();
+    legacyMockData.notSetClickIdCookie = undefined;
+    legacyMockData.cookieDomain = undefined;
+    legacyMockData.cookieSameSite = undefined;
+    legacyMockData.useHttpOnlyCookie = undefined;
+    legacyMockData.cookieExpiration = undefined;
+    mock('getAllEventData', () => assign(baseEventData(), { page_location: 'https://example.com/checkout?epik=abc123' }));
+
+    let cookieOptions;
+    mock('setCookie', (name, value, options) => {
+      cookieOptions = options;
+    });
+
+    runCode(legacyMockData);
+
+    assertThat(cookieOptions).isEqualTo({
+      domain: 'example.com',
+      path: '/',
+      samesite: 'Lax',
+      secure: true,
+      httpOnly: false,
+      'max-age': 31536000
+    });
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Cookie] Auto domain falls back to Referer header, then to auto'
+  code: |-
+    [
+      { computed: 'example.com', expectedDomain: 'example.com' },
+      { computed: '', expectedDomain: 'auto' }
+    ].forEach(scenario => {
+      cleanup();
+      let computedFrom;
+      mock('computeEffectiveTldPlusOne', (domainOrUrl) => {
+        computedFrom = domainOrUrl;
+        return scenario.computed;
+      });
+      mock('getAllEventData', () => ({
+        event_name: 'purchase',
+        page_referrer: 'https://referrer.com/?epik=abc123'
+      }));
+
+      let cookieOptions;
+      mock('setCookie', (name, value, options) => {
+        cookieOptions = options;
+      });
+
+      runCode(mockData);
+
+      assertThat(computedFrom).isEqualTo('https://example.com/checkout');
+      assertThat(cookieOptions.domain).isEqualTo(scenario.expectedDomain);
+    });
+
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Cookie] Does not set epik cookie when disabled but still sends the click
+    id'
+  code: |-
+    mockData.notSetClickIdCookie = true;
+    mock('getAllEventData', () => assign(baseEventData(), { page_location: 'https://example.com/checkout?epik=abc123' }));
+
+    let sentClickId;
+    mock('sendHttpRequest', (url, callback, options, body) => {
+      sentClickId = JSON.parse(body).data[0].user_data.click_id;
+      callback(200, {}, '');
+    });
+
+    runCode(mockData);
+
+    assertApi('setCookie').wasNotCalled();
+    assertThat(sentClickId).isEqualTo('abc123');
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Cookie] Does not set epik cookie when the URL has no epik parameter'
+  code: |-
+    mock('getCookieValues', (name) => (name === '_epik' ? ['fromCookie'] : []));
+    mock('getAllEventData', () => assign(baseEventData(), { page_location: 'https://example.com/checkout' }));
+
+    runCode(mockData);
+
+    assertApi('setCookie').wasNotCalled();
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Normalization] Normalizes each user data field before hashing'
+  code: |-
+    [
+      { field: 'em', input: '  Test@Example.COM ', normalized: 'test@example.com' },
+      { field: 'ph', input: '+1 (555) 123-4567', normalized: '15551234567' },
+      { field: 'ph', input: '00 44 20 7946 0958', normalized: '442079460958' },
+      { field: 'ge', input: 'Female', normalized: 'f' },
+      { field: 'ge', input: ' MALE ', normalized: 'm' },
+      { field: 'ge', input: 'Non-Binary', normalized: 'n' },
+      { field: 'ge', input: 'F', normalized: 'f' },
+      { field: 'db', input: '1990-01-15', normalized: '19900115' },
+      { field: 'db', input: 19900115, normalized: '19900115' },
+      { field: 'fn', input: ' John ', normalized: 'john' },
+      { field: 'ln', input: 'DOE', normalized: 'doe' },
+      { field: 'ct', input: 'Las Vegas', normalized: 'lasvegas' },
+      { field: 'ct', input: "St. John's", normalized: 'stjohns' },
+      { field: 'st', input: ' N.Y. ', normalized: 'ny' },
+      { field: 'zp', input: '98101-1234', normalized: '98101' },
+      { field: 'zp', input: '98101 1234', normalized: '98101' },
+      { field: 'zp', input: 'SW1A 1AA', normalized: 'sw1a1aa' },
+      { field: 'zp', input: 10001, normalized: '10001' },
+      { field: 'country', input: ' US ', normalized: 'us' },
+      { field: 'external_id', input: ' User-ABC ', normalized: 'user-abc' },
+      { field: 'hashed_maids', input: ' 6D92078A-8246-4BA4-AE5B-76104861E7DC ', normalized: '6d92078a-8246-4ba4-ae5b-76104861e7dc' }
+    ].forEach(scenario => {
+      cleanup();
+      const copyMockData = createMockData();
+      copyMockData.userDataList = [{ name: scenario.field, value: scenario.input }];
+
+      let sentUserData;
+      mock('sendHttpRequest', (url, callback, options, body) => {
+        sentUserData = JSON.parse(body).data[0].user_data;
+        callback(200, {}, '');
+      });
+
+      runCode(copyMockData);
+
+      assertThat(sentUserData[scenario.field]).isEqualTo([hash(scenario.normalized)]);
+    });
+
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Normalization] Hashes every array element and drops elements that normalize
+    to empty'
+  code: |-
+    const alreadyHashed = '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef';
+    mockData.userDataList = [
+      { name: 'em', value: ['A@Example.com', ' ', 'undefined', alreadyHashed] },
+      { name: 'ph', value: ['+1 555 000 1111', '---'] }
+    ];
+
+    let sentUserData;
+    mock('sendHttpRequest', (url, callback, options, body) => {
+      sentUserData = JSON.parse(body).data[0].user_data;
+      callback(200, {}, '');
+    });
+
+    runCode(mockData);
+
+    assertThat(sentUserData.em).isEqualTo([hash('a@example.com'), alreadyHashed]);
+    assertThat(sentUserData.ph).isEqualTo([hash('15550001111')]);
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Normalization] Does not send fields that normalize to empty'
+  code: |-
+    mock('getAllEventData', () => assign(baseEventData(), {
+      email: '   ',
+      phone: '() -',
+      city: '...',
+      zip: ' - ',
+      gender: 'null',
+      db: 'undefined',
+      hashed_maids: ['', ' ']
+    }));
+
+    let sentUserData;
+    mock('sendHttpRequest', (url, callback, options, body) => {
+      sentUserData = JSON.parse(body).data[0].user_data;
+      callback(200, {}, '');
+    });
+
+    runCode(mockData);
+
+    ['em', 'ph', 'ct', 'zp', 'ge', 'db', 'hashed_maids'].forEach(field => {
+      assertThat(sentUserData.hasOwnProperty(field)).isFalse();
+    });
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Normalization] Drops regex dependent fields when Re2 is unavailable'
+  code: |-
+    mock('createRegex', () => null);
+    mock('getAllEventData', () => assign(baseEventData(), {
+      email: 'Test@Example.com',
+      phone: '+1 555 123 4567',
+      firstName: 'John',
+      lastName: 'Doe',
+      city: 'New York',
+      state: 'NY',
+      zip: '10001',
+      countryCode: 'US',
+      db: '1990-01-01',
+      gender: 'male',
+      external_id: 'ext123',
+      hashed_maids: 'maid123'
+    }));
+
+    let sentUserData;
+    mock('sendHttpRequest', (url, callback, options, body) => {
+      sentUserData = JSON.parse(body).data[0].user_data;
+      callback(200, {}, '');
+    });
+
+    runCode(mockData);
+
+    ['ph', 'ct', 'st', 'zp', 'db'].forEach(field => {
+      assertThat(sentUserData.hasOwnProperty(field)).isFalse();
+    });
+    assertThat(sentUserData.em).isEqualTo([hash('test@example.com')]);
+    assertThat(sentUserData.fn).isEqualTo([hash('john')]);
+    assertThat(sentUserData.ln).isEqualTo([hash('doe')]);
+    assertThat(sentUserData.country).isEqualTo([hash('us')]);
+    assertThat(sentUserData.ge).isEqualTo([hash('m')]);
+    assertThat(sentUserData.external_id).isEqualTo([hash('ext123')]);
+    assertThat(sentUserData.hashed_maids).isEqualTo([hash('maid123')]);
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Normalization] Does not hash IP address, user agent, click id and customer
+    type'
+  code: |-
+    mockData.userDataList = [
+      { name: 'client_ip_address', value: '203.0.113.5' },
+      { name: 'client_user_agent', value: 'TestAgent/1.0' },
+      { name: 'click_id', value: 'Click-ID' },
+      { name: 'customer_type', value: 'new' }
+    ];
+
+    let sentUserData;
+    mock('sendHttpRequest', (url, callback, options, body) => {
+      sentUserData = JSON.parse(body).data[0].user_data;
+      callback(200, {}, '');
+    });
+
+    runCode(mockData);
+
+    assertThat(sentUserData).isEqualTo({
+      client_ip_address: '203.0.113.5',
+      client_user_agent: 'TestAgent/1.0',
+      click_id: 'Click-ID',
+      customer_type: 'new'
+    });
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Override] Empty manual values remove the auto mapped value'
+  code: |-
+    mockData.userDataList = [
+      { name: 'em', value: '' },
+      { name: 'ph', value: undefined },
+      { name: 'fn', value: 'undefined' },
+      { name: 'ln', value: 'null' }
+    ];
+    mockData.customDataList = [{ name: 'currency', value: undefined }];
+    mockData.serverEventDataList = [{ name: 'event_source_url', value: '' }];
+    mock('getAllEventData', () => assign(baseEventData(), {
+      email: 'test@example.com',
+      phone: '+1 555 123 4567',
+      firstName: 'John',
+      lastName: 'Doe',
+      currency: 'USD'
+    }));
+
+    let sentData;
+    mock('sendHttpRequest', (url, callback, options, body) => {
+      sentData = JSON.parse(body).data[0];
+      callback(200, {}, '');
+    });
+
+    runCode(mockData);
+
+    ['em', 'ph', 'fn', 'ln'].forEach(field => {
+      assertThat(sentData.user_data.hasOwnProperty(field)).isFalse();
+    });
+    assertThat(sentData.custom_data.hasOwnProperty('currency')).isFalse();
+    assertThat(sentData.event_source_url).isEqualTo('');
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
+- name: '[Override] Keeps manual values that are false'
+  code: |-
+    mockData.serverEventDataList = [
+      { name: 'opt_out', value: false },
+      { name: 'wifi', value: false }
+    ];
+
+    let sentData;
+    mock('sendHttpRequest', (url, callback, options, body) => {
+      sentData = JSON.parse(body).data[0];
+      callback(200, {}, '');
+    });
+
+    runCode(mockData);
+
+    assertThat(sentData.opt_out).isStrictlyEqualTo(false);
+    assertThat(sentData.wifi).isStrictlyEqualTo(false);
+    assertApi('gtmOnSuccess').wasCalled();
+    assertApi('gtmOnFailure').wasNotCalled();
 setup: |-
   const JSON = require('JSON');
+  const sha256Sync = require('sha256Sync');
+
+  const hash = (value) => sha256Sync(value, { outputEncoding: 'hex' });
 
   function assign(target, source) {
     for (const key in source) {
@@ -2044,6 +2610,11 @@ setup: |-
       apiAccessToken: 'token123',
       testMode: false,
       useOptimisticScenario: false,
+      notSetClickIdCookie: false,
+      cookieDomain: 'auto',
+      cookieSameSite: 'lax',
+      useHttpOnlyCookie: false,
+      cookieExpiration: '365',
       adStorageConsent: 'optional',
       autoMapServerEventDataParameters: true,
       serverEventDataList: [],
@@ -2056,6 +2627,7 @@ setup: |-
 
   const cleanup = () => {
     mock('getCookieValues', () => []);
+    mock('computeEffectiveTldPlusOne', () => 'example.com');
   };
   cleanup();
 
@@ -2077,6 +2649,13 @@ setup: |-
 
 
 ___NOTES___
+
+2026-11-03 - Change Notes:
+  - Action Source now accepts variables, so one tag can serve web, app_ios, app_android and offline events; the value is trimmed and lowercased and falls back to web when empty. Its help text lists the accepted values
+  - Auto-map event_source_url, client_ip_address and client_user_agent for every Action Source instead of only web, since Pinterest recommends IP address and user agent for all events and they may be the only accepted identifier. Rename the "Source URL" override option to "Event Source URL"
+  - Add a Cookie Settings section for the _epik cookie: Do not set Click ID cookie, Cookie Domain (auto by default, resolved from page_location or the Referer header), Cookie SameSite (lax by default), Use HttpOnly cookies (accepts variables) and Click ID Cookie Expiration (365 days by default). Saved tags keep SameSite Lax, no HttpOnly and 1 year, but their cookie domain is now computed instead of the literal auto
+  - Normalize user data before hashing as described in the Pinterest API schema: phone keeps digits only without leading zeros, gender becomes f/m/n, date of birth keeps digits only, city and state lose spaces and punctuation, ZIP loses separators (US ZIP+4 is cut to 5 digits). Values and array elements that normalize to empty are not sent; if Re2 is unavailable, ph, db, ct, st and zp are not sent instead of being hashed unnormalized
+  - Point help links to the v5 API docs, and add unit tests for action sources, cookie settings, normalization and manual overrides
 
 2026-10-08 - Change Notes:
   - Add Pinterest's new user_data.customer_type ("new"/"returning") as a manual User Data option and auto-map it unhashed from eventData.customer_type.

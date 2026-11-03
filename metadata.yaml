@@ -1,6 +1,8 @@
 homepage: 'https://stape.io/'
 documentation: 'https://github.com/stape-io/pinterest-capi-tag'
 versions:
+  - sha: aa4beca66c97a2ddb6d150154a9cd347cadbf507
+    changeNotes: Allow Action Source from variables, send event source URL, IP and user agent for all action sources, add cookie settings and normalize user data before hashing.
   - sha: 976a1e1f5ab9adc0fd5757b797826fdc492145b6
     changeNotes: Add customer type, external measurement IDs and variable-driven Test Mode.
   - sha: f1f552ad303c4dbd857889606ad9fbc28c3a9db8
